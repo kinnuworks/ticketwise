@@ -79,7 +79,7 @@ export default function Inbox() {
     <>
       <h1>Support inbox</h1>
       <p className="lede">
-        Paste a user's support message with a failed Sui transaction or wallet address. Ticketwise reads the chain through Tatum,
+        Paste a user&apos;s support message with a failed Sui transaction or wallet address. Ticketwise reads the chain through Tatum,
         explains the failure, and answers with what your team taught it. Every correction is stored in Walrus Memory.
       </p>
       <div className="grid">
