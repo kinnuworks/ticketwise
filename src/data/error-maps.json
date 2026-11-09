@@ -1,1 +1,1566 @@
-{"packages":[]}
+{
+ "packages": [
+  {
+   "key": "deepbook",
+   "name": "DeepBook v3",
+   "addresses": [
+    "0x2c8d603bc51326b8c13cef9dd07031a408a48dddb541963357661df5d3204809",
+    "0xcaf6ba059d539a97646d47f0b9ddf843e138d215e2a12ca1f4585d386f7aec3a",
+    "0xb29d83c26cdd2a64959263abbcfc4a6937f0c9fccaf98580ca56faded65be244",
+    "0x00c1a56ec8c4c623a848b2ed2f03d23a25d17570b670c22106f336eb933785cc",
+    "0x2d93777cc8b67c064b495e8606f2f8f5fd578450347bbe7b36e0bc03963c1c40",
+    "0x337f4f4f6567fcd778d5454f27c16c70e2f274cc6377ea6249ddf491482ef497",
+    "0xf48222c4e057fa468baf136bff8e12504209d43850c5778f76159292a96f621e",
+    "0x0e735f8c93a95722efd73521aca7a7652c0bb71ed1daf41b26dfd7d1ff71f748",
+    "0xbca0cefe720330e7bb4f2283438b68de6a0e656688db4ac90d61e71fe6151fe8"
+   ],
+   "addressSources": [
+    "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/crates/indexer/src/lib.rs#L15-L21",
+    "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/Published.toml",
+    "https://github.com/MystenLabs/deepbookv3/commits/main/packages/deepbook/Published.toml",
+    "Sui mainnet GraphQL packageVersions(address: 0x2c8d603bc51326b8c13cef9dd07031a408a48dddb541963357661df5d3204809) -> versions 1-9 (https://graphql.mainnet.sui.io/graphql)"
+   ],
+   "errors": {
+    "registry": {
+     "1": {
+      "constant": "EPoolAlreadyExists",
+      "meaning": "A trading pool for this exact pair and settings already exists, so a new one cannot be created; use the existing pool instead.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/registry.move#L22"
+     },
+     "2": {
+      "constant": "EPoolDoesNotExist",
+      "meaning": "No DeepBook pool exists for the coin pair the user picked; check the pair (and its order) or choose a listed market.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/registry.move#L23"
+     },
+     "3": {
+      "constant": "EPackageVersionNotEnabled",
+      "meaning": "The app sent the request through a DeepBook contract version that is not switched on; the user should refresh or update the app and retry.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/registry.move#L24"
+     },
+     "4": {
+      "constant": "EVersionNotEnabled",
+      "meaning": "An admin tried to turn off a DeepBook version that is not currently on; nothing a regular user did, escalate to the app team.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/registry.move#L25"
+     },
+     "5": {
+      "constant": "EVersionAlreadyEnabled",
+      "meaning": "An admin tried to turn on a DeepBook version that is already on; nothing a regular user did, escalate to the app team.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/registry.move#L26"
+     },
+     "6": {
+      "constant": "ECoinAlreadyWhitelisted",
+      "meaning": "An admin tried to add a coin to the stablecoin list that is already on it; nothing for the user to do.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/registry.move#L27"
+     },
+     "7": {
+      "constant": "ECoinNotWhitelisted",
+      "meaning": "The coin involved is not on DeepBook's approved stablecoin list for this action; the user should pick a supported coin.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/registry.move#L28"
+     },
+     "8": {
+      "constant": "EMaxBalanceManagersReached",
+      "meaning": "This wallet has already registered the maximum number of DeepBook trading accounts; the user should reuse an existing trading account.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/registry.move#L29"
+     },
+     "9": {
+      "constant": "EAppNotAuthorized",
+      "meaning": "The app the user is using is not authorized by DeepBook for this protected feature; they should contact the app's support.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/registry.move#L30"
+     },
+     "10": {
+      "constant": "EPauseCapNotValid",
+      "meaning": "An admin pause key was not valid or the pause-key list does not exist; internal admin action, escalate to the app team.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/registry.move#L31"
+     }
+    },
+    "pool": {
+     "1": {
+      "constant": "EInvalidFee",
+      "meaning": "The fee settings given when creating or configuring the pool are not allowed; this is an admin/pool-setup issue, not a trading mistake.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/pool.move#L50"
+     },
+     "2": {
+      "constant": "ESameBaseAndQuote",
+      "meaning": "The user tried to create a pool where both sides are the same coin; pick two different coins.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/pool.move#L51"
+     },
+     "3": {
+      "constant": "EInvalidTickSize",
+      "meaning": "The price step (tick size) chosen for a new pool is invalid, it must be a positive power of ten; fix the pool settings.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/pool.move#L52"
+     },
+     "4": {
+      "constant": "EInvalidLotSize",
+      "meaning": "The order quantity step (lot size) chosen for the pool is invalid; it must be a positive power of ten that fits the pool's settings.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/pool.move#L53"
+     },
+     "5": {
+      "constant": "EInvalidMinSize",
+      "meaning": "The minimum order size chosen for the pool is invalid; it must be a positive power of ten and a multiple of the lot size.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/pool.move#L54"
+     },
+     "6": {
+      "constant": "EInvalidQuantityIn",
+      "meaning": "A swap was sent with amounts on both sides or on neither side; the user should enter an amount for exactly one coin and retry.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/pool.move#L55"
+     },
+     "7": {
+      "constant": "EIneligibleReferencePool",
+      "meaning": "The pool used as a price reference for DEEP fees is not eligible (it must be a whitelisted DEEP pool); this is a pool-setup issue.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/pool.move#L56"
+     },
+     "9": {
+      "constant": "EInvalidOrderBalanceManager",
+      "meaning": "The user tried to change or cancel an order that belongs to a different trading account; make sure the right account is selected.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/pool.move#L57"
+     },
+     "10": {
+      "constant": "EIneligibleTargetPool",
+      "meaning": "The pool cannot have its DEEP price updated from the chosen reference pool; this is a pool-setup issue, not a user mistake.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/pool.move#L58"
+     },
+     "11": {
+      "constant": "EPackageVersionDisabled",
+      "meaning": "The pool no longer accepts requests from the contract version the app used; the user should refresh or update the app and retry.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/pool.move#L59"
+     },
+     "12": {
+      "constant": "EMinimumQuantityOutNotMet",
+      "meaning": "The swap would return less than the minimum the user asked for (price moved); raise slippage tolerance or try a smaller amount.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/pool.move#L60"
+     },
+     "13": {
+      "constant": "EInvalidStake",
+      "meaning": "The user tried to stake zero DEEP; enter an amount greater than zero.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/pool.move#L61"
+     },
+     "14": {
+      "constant": "EPoolNotRegistered",
+      "meaning": "This pool is not registered with DeepBook, so the admin action cannot run on it; escalate to the app team.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/pool.move#L62"
+     },
+     "15": {
+      "constant": "EPoolCannotBeBothWhitelistedAndStable",
+      "meaning": "A pool was configured as both whitelisted and stable, which is not allowed; this is a pool-setup issue.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/pool.move#L63"
+     },
+     "16": {
+      "constant": "EInvalidReferralMultiplier",
+      "meaning": "The referral reward multiplier chosen is too high or not a valid step; pick a smaller, supported value.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/pool.move#L64"
+     },
+     "17": {
+      "constant": "EInvalidEWMAAlpha",
+      "meaning": "An admin set a price-smoothing parameter above the allowed maximum; internal setting, escalate to the app team.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/pool.move#L65"
+     },
+     "18": {
+      "constant": "EInvalidZScoreThreshold",
+      "meaning": "An admin set a volatility threshold above the allowed maximum; internal setting, escalate to the app team.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/pool.move#L66"
+     },
+     "19": {
+      "constant": "EInvalidAdditionalTakerFee",
+      "meaning": "An admin set an extra taker fee above the allowed maximum; internal setting, escalate to the app team.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/pool.move#L67"
+     },
+     "20": {
+      "constant": "EWrongPoolReferral",
+      "meaning": "The referral being used belongs to a different pool than the one the user is trading on; use the referral for this pool.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/pool.move#L68"
+     },
+     "21": {
+      "constant": "EInvalidDeepPrice",
+      "meaning": "DeepBook could not work out a valid DEEP price for fees in this pool; the user can retry later or pay fees in the trading coins.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/pool.move#L69"
+     },
+     "1337": {
+      "constant": "abort 1337 (literal, deprecated function)",
+      "meaning": "The app called a DeepBook function that has been retired; the user should update or refresh the app.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/pool.move#L1003"
+     }
+    },
+    "state": {
+     "1": {
+      "constant": "ENoStake",
+      "meaning": "The user tried to create a governance proposal or vote without any DEEP staked in this pool; stake DEEP first.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/state/state.move#L27"
+     },
+     "2": {
+      "constant": "EMaxOpenOrders",
+      "meaning": "The trading account already has the maximum number of open orders in this pool; cancel some orders before placing new ones.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/state/state.move#L28"
+     },
+     "3": {
+      "constant": "EAlreadyProposed",
+      "meaning": "The user already submitted a fee proposal this period; they can only make one, but can still vote.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/state/state.move#L29"
+     }
+    },
+    "governance": {
+     "1": {
+      "constant": "EInvalidMakerFee",
+      "meaning": "The proposed maker fee is outside the allowed range or not a valid step; choose a fee within the pool's limits.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/state/governance.move#L14"
+     },
+     "2": {
+      "constant": "EInvalidTakerFee",
+      "meaning": "The proposed taker fee is outside the allowed range or not a valid step; choose a fee within the pool's limits.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/state/governance.move#L15"
+     },
+     "3": {
+      "constant": "EProposalDoesNotExist",
+      "meaning": "The user tried to vote on a proposal that does not exist (or has expired); refresh and pick a current proposal.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/state/governance.move#L16"
+     },
+     "4": {
+      "constant": "EMaxProposalsReachedNotEnoughVotes",
+      "meaning": "The proposal list is full and the user's stake is too small to replace an existing proposal; stake more or vote on an existing one.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/state/governance.move#L17"
+     },
+     "5": {
+      "constant": "EWhitelistedPoolCannotChange",
+      "meaning": "Fees on this whitelisted pool are fixed and cannot be changed by proposals.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/state/governance.move#L18"
+     },
+     "6": {
+      "constant": "EInvalidStakeRequired",
+      "meaning": "The proposed stake requirement is higher than allowed; pick a smaller value.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/state/governance.move#L19"
+     }
+    },
+    "balance_manager": {
+     "0": {
+      "constant": "EInvalidOwner",
+      "meaning": "The wallet signing is not the owner of this DeepBook trading account; switch to the owner wallet.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/balance_manager.move#L29"
+     },
+     "1": {
+      "constant": "EInvalidTrader",
+      "meaning": "The trade, deposit or withdraw permission used is not (or no longer) authorized on this trading account; ask the owner to re-grant access.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/balance_manager.move#L30"
+     },
+     "2": {
+      "constant": "EInvalidProof",
+      "meaning": "The trading permission used belongs to a different trading account; make sure the right account is selected and retry.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/balance_manager.move#L31"
+     },
+     "3": {
+      "constant": "EBalanceManagerBalanceTooLow",
+      "meaning": "The trading account does not hold enough of this coin; deposit more or reduce the amount.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/balance_manager.move#L32"
+     },
+     "4": {
+      "constant": "EMaxCapsReached",
+      "meaning": "The trading account already has the maximum number of delegated trader permissions; revoke one before adding another.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/balance_manager.move#L33"
+     },
+     "5": {
+      "constant": "ECapNotInList",
+      "meaning": "The permission being revoked is not on this trading account's list; it may already be revoked.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/balance_manager.move#L34"
+     },
+     "6": {
+      "constant": "EInvalidReferralOwner",
+      "meaning": "Only the owner of this referral can perform this action; switch to the referral owner's wallet.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/balance_manager.move#L35"
+     },
+     "1337": {
+      "constant": "abort 1337 (literal, deprecated function)",
+      "meaning": "The app called a retired trading-account function; the user should update or refresh the app.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/balance_manager.move#L134"
+     }
+    },
+    "history": {
+     "0": {
+      "constant": "EHistoricVolumesNotFound",
+      "meaning": "Trading history for the previous period is not available yet, so rebates cannot be calculated; try again later.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/state/history.move#L14"
+     }
+    },
+    "order_info": {
+     "0": {
+      "constant": "EOrderInvalidPrice",
+      "meaning": "The order price is outside the allowed range or not on the pool's price step; adjust the price and retry.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/book/order_info.move#L19"
+     },
+     "1": {
+      "constant": "EOrderBelowMinimumSize",
+      "meaning": "The order is smaller than the pool's minimum order size; increase the quantity.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/book/order_info.move#L20"
+     },
+     "2": {
+      "constant": "EOrderInvalidLotSize",
+      "meaning": "The order quantity is not a multiple of the pool's quantity step; round the amount and retry.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/book/order_info.move#L21"
+     },
+     "3": {
+      "constant": "EInvalidExpireTimestamp",
+      "meaning": "The order's expiry time is already in the past; set a later expiry.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/book/order_info.move#L22"
+     },
+     "4": {
+      "constant": "EInvalidOrderType",
+      "meaning": "The order type chosen is not valid; pick a standard order type (limit, post-only, immediate-or-cancel, fill-or-kill).",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/book/order_info.move#L23"
+     },
+     "5": {
+      "constant": "EPOSTOrderCrossesOrderbook",
+      "meaning": "A post-only order would have traded immediately at the chosen price; move the price away from the market or use a normal limit order.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/book/order_info.move#L24"
+     },
+     "6": {
+      "constant": "EFOKOrderCannotBeFullyFilled",
+      "meaning": "A fill-or-kill order could not be filled completely at the chosen price; lower the size, change the price or use another order type.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/book/order_info.move#L25"
+     },
+     "7": {
+      "constant": "EMarketOrderCannotBePostOnly",
+      "meaning": "A market order cannot be post-only; use a limit order for post-only.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/book/order_info.move#L26"
+     },
+     "8": {
+      "constant": "ESelfMatchingCancelTaker",
+      "meaning": "The order would have matched against the user's own resting order and the self-trade setting cancels it; cancel the other order or change the setting.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/book/order_info.move#L27"
+     }
+    },
+    "book": {
+     "1": {
+      "constant": "EInvalidAmountIn",
+      "meaning": "A quote/swap was requested with amounts on both sides or neither; enter an amount for exactly one coin.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/book/book.move#L19"
+     },
+     "2": {
+      "constant": "EEmptyOrderbook",
+      "meaning": "There are no buy or sell orders on one side of this market, so a mid price is unavailable; try later or use another market.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/book/book.move#L20"
+     },
+     "3": {
+      "constant": "EInvalidPriceRange",
+      "meaning": "The requested price range is invalid (low above high or outside limits); adjust the range.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/book/book.move#L21"
+     },
+     "4": {
+      "constant": "EInvalidTicks",
+      "meaning": "The number of price levels requested must be more than zero.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/book/book.move#L22"
+     },
+     "5": {
+      "constant": "EOrderBelowMinimumSize",
+      "meaning": "After the change the order would be smaller than the minimum order size; choose a larger quantity or cancel it instead.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/book/book.move#L23"
+     },
+     "6": {
+      "constant": "EOrderInvalidLotSize",
+      "meaning": "The new order quantity is not a multiple of the pool's quantity step; round the amount and retry.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/book/book.move#L24"
+     },
+     "7": {
+      "constant": "ENewQuantityMustBeLessThanOriginal",
+      "meaning": "Orders can only be reduced, not increased; place a new order to add size.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/book/book.move#L25"
+     }
+    },
+    "order": {
+     "0": {
+      "constant": "EInvalidNewQuantity",
+      "meaning": "The new quantity for this order is invalid (not lower than the remaining amount or at/below what is already filled); pick a valid smaller amount.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/book/order.move#L19"
+     },
+     "1": {
+      "constant": "EOrderExpired",
+      "meaning": "The order has already expired, so it cannot be modified; place a new order.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/book/order.move#L20"
+     }
+    },
+    "math": {
+     "0": {
+      "constant": "EInvalidPrecision",
+      "meaning": "An internal math setting was out of range; not caused by the user, escalate to the app team.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/helper/math.move#L12"
+     }
+    },
+    "deep_price": {
+     "1": {
+      "constant": "EDataPointRecentlyAdded",
+      "meaning": "The DEEP price for this pool was updated very recently; wait a short while before updating it again.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/vault/deep_price.move#L12"
+     },
+     "2": {
+      "constant": "ENoDataPoints",
+      "meaning": "This pool has no DEEP price data yet, so fees cannot be paid in DEEP; pay fees in the trading coins or try later.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/vault/deep_price.move#L13"
+     }
+    },
+    "big_vector": {
+     "0": {
+      "constant": "ESliceTooSmall",
+      "meaning": "Internal order-book storage setting was too small; not caused by the user, escalate to the app team.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/helper/big_vector.move#L72"
+     },
+     "1": {
+      "constant": "ESliceTooBig",
+      "meaning": "Internal order-book storage setting was too large; not caused by the user, escalate to the app team.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/helper/big_vector.move#L75"
+     },
+     "2": {
+      "constant": "EFanOutTooSmall",
+      "meaning": "Internal order-book storage setting was too small; not caused by the user, escalate to the app team.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/helper/big_vector.move#L78"
+     },
+     "3": {
+      "constant": "EFanOutTooBig",
+      "meaning": "Internal order-book storage setting was too large; not caused by the user, escalate to the app team.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/helper/big_vector.move#L81"
+     },
+     "4": {
+      "constant": "ENotEmpty",
+      "meaning": "Internal order-book storage could not be removed because it still holds orders; escalate to the app team.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/helper/big_vector.move#L84"
+     },
+     "5": {
+      "constant": "ENotFound",
+      "meaning": "The order could not be found in the order book (it may already be filled, canceled or expired); refresh the open orders list.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/helper/big_vector.move#L87"
+     },
+     "6": {
+      "constant": "EExists",
+      "meaning": "An order with the same ID is already in the order book; retry the order.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/helper/big_vector.move#L90"
+     },
+     "7": {
+      "constant": "EBadRemove",
+      "meaning": "Internal order-book error while removing an order; not caused by the user, escalate to the app team.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/helper/big_vector.move#L95"
+     },
+     "8": {
+      "constant": "ENotAdjacent",
+      "meaning": "Internal order-book consistency error; not caused by the user, escalate to the app team.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/helper/big_vector.move#L99"
+     },
+     "9": {
+      "constant": "EBadRedistribution",
+      "meaning": "Internal order-book consistency error; not caused by the user, escalate to the app team.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/helper/big_vector.move#L103"
+     }
+    },
+    "vault": {
+     "1": {
+      "constant": "ENotEnoughBaseForLoan",
+      "meaning": "The pool does not hold enough of the base coin for this flash loan; borrow a smaller amount.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/vault/vault.move#L14"
+     },
+     "2": {
+      "constant": "ENotEnoughQuoteForLoan",
+      "meaning": "The pool does not hold enough of the quote coin for this flash loan; borrow a smaller amount.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/vault/vault.move#L15"
+     },
+     "3": {
+      "constant": "EInvalidLoanQuantity",
+      "meaning": "A flash loan was requested for zero; enter an amount greater than zero.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/vault/vault.move#L16"
+     },
+     "4": {
+      "constant": "EIncorrectLoanPool",
+      "meaning": "The flash loan was repaid to a different pool than it was borrowed from; repay to the same pool.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/vault/vault.move#L17"
+     },
+     "5": {
+      "constant": "EIncorrectTypeReturned",
+      "meaning": "The flash loan was repaid in the wrong coin; repay in the coin that was borrowed.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/vault/vault.move#L18"
+     },
+     "6": {
+      "constant": "EIncorrectQuantityReturned",
+      "meaning": "The flash loan was not repaid in the exact amount borrowed; repay the full amount.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/vault/vault.move#L19"
+     },
+     "7": {
+      "constant": "ENoBalanceToSettle",
+      "meaning": "There was nothing to settle for this trading account in this step; usually harmless, retry or refresh.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/vault/vault.move#L20"
+     },
+     "8": {
+      "constant": "EHasOwedBalances",
+      "meaning": "The trading account still owes funds for this step; make sure enough balance is deposited and retry.",
+      "source": "https://github.com/MystenLabs/deepbookv3/blob/5862332d814b6c27a85971331a13a0d74ade5493/packages/deepbook/sources/vault/vault.move#L21"
+     }
+    }
+   },
+   "hot": [
+    "0xcaf6ba059d539a97646d47f0b9ddf843e138d215e2a12ca1f4585d386f7aec3a",
+    "0x0e735f8c93a95722efd73521aca7a7652c0bb71ed1daf41b26dfd7d1ff71f748",
+    "0xbca0cefe720330e7bb4f2283438b68de6a0e656688db4ac90d61e71fe6151fe8"
+   ]
+  },
+  {
+   "key": "bluefin",
+   "name": "Bluefin Spot (CLMM)",
+   "addresses": [
+    "0x3492c874c1e3b3e2984e8c41b589e642d4d0a5d6459e5a9cfc2d52fd7c89c267",
+    "0xbc70b10012a01c00fda8957dbaa1f2b83683414f55e22341792b081fdffa9baa",
+    "0xb104ecc75397f3a65735ef26c85a037da1d197e26f4f275a9990a577ba0e6c4c",
+    "0xf1962ddb76a7f9968b4e597278d3cc717a00620cc421b00e3429c5c071eba26a",
+    "0xbe89d6ecf91fea245164e5e8ed5a6cc8af4e9361b8a9e33dbaf7316af0dc7732",
+    "0x1ff88600e151bcbee426f98d3d82880b8999d144e48e2dc66a52c5f76bfd4c53",
+    "0xa31282fc0a0ad50cf5f20908cfbb1539a143f5a38912eb8823a8dd6cbf98bc44",
+    "0x702301e7c6ca527a6f6a83f12c5edf2dcd6ec7a23fb5318ec86d88282eab7057",
+    "0xe82353753b719d81890fc98a6b9d809d4b2531a90cd5f68fbdc89d4292e53bf2",
+    "0x6c796c3ab3421a68158e0df18e4657b2827b1f8fed5ed4b82dba9c935988711b",
+    "0x406f52151e7dd65addd93b0bdad7989e82aec20c3ae6971954a5140f14a59e4b",
+    "0x5b56670bd327ee6329c827bb5a0f9d3fa0f1afc06f96fd6badab79e022d96254",
+    "0x49f4bc2463c4dc079bd65940bc3122b4e00deb9ba27c865a61cfec81475652ce",
+    "0x67b34b728c4e28e704dcfecf7c5cf55c7fc593b6c65c20d1836d97c209c1928a",
+    "0xafa22fb0bf987fe79886fe7fc9a670348ff247c6cf897d2a7d01403bad6c547d",
+    "0x5d029d551d589105a9589e47ef75ffaa43e6d9d1d844745867db2a56e18f65e1",
+    "0xd075338d105482f1527cbfd363d6413558f184dec36d9138a70261e87f486e9c"
+   ],
+   "addressSources": [
+    "https://github.com/fireflyprotocol/bluefin-spot-contract-interface/blob/91ce930575b2aa3decab9b7e129b8002deba80c1/Move.toml",
+    "https://github.com/fireflyprotocol/bluefin-spot-contract-interface/commits/main/Move.toml",
+    "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/README.md",
+    "Sui mainnet GraphQL packageVersions(address: 0x3492c874c1e3b3e2984e8c41b589e642d4d0a5d6459e5a9cfc2d52fd7c89c267) -> versions 1-17; UpgradeCap 0xd5b2d2159a78030e6f07e028eb75236693ed7f2f32fecbdc1edb32d3a2079c0d points to v17 (https://graphql.mainnet.sui.io/graphql)"
+   ],
+   "notes": "Most Bluefin codes are defined in errors.move but raised from the listed calling module (Move reports the caller as the abort module); codes are listed under each module whose source references them. Source is the v17 public mirror.",
+   "errors": {
+    "pool": {
+     "0": {
+      "constant": "abort 0 (literal)",
+      "meaning": "The amount repaid to finish a swap did not exactly match what was owed; retry the swap from the app.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/pool.move#L1078"
+     },
+     "1002": {
+      "constant": "EInvalidTicks",
+      "meaning": "The price range chosen for the position is invalid (lower not below upper, or not on the pool's price steps); adjust the range.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L21"
+     },
+     "1003": {
+      "constant": "EInsufficientAmount",
+      "meaning": "The amount provided is less than what the action needs; add more funds or lower the amount.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L24"
+     },
+     "1006": {
+      "constant": "EFlashSwapInProgress",
+      "meaning": "Another swap step is still open in this transaction for this pool; let the app finish the swap and retry.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L33"
+     },
+     "1007": {
+      "constant": "ENoFlashSwapInProgress",
+      "meaning": "The transaction tried to finish a swap that was never started; retry the swap from the app.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L36"
+     },
+     "1009": {
+      "constant": "EInvalidPriceLimit",
+      "meaning": "The swap's price limit is on the wrong side of the current price or out of bounds; refresh the quote and retry.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L42"
+     },
+     "1010": {
+      "constant": "ESlippageExceeds",
+      "meaning": "The price moved past the user's slippage tolerance; raise slippage a bit or try a smaller amount.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L46"
+     },
+     "1011": {
+      "constant": "EReceiptAndPoolMismatch",
+      "meaning": "The swap was settled against a different pool than it started on; retry the swap from the app.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L50"
+     },
+     "1012": {
+      "constant": "EPoolIsPaused",
+      "meaning": "This pool is temporarily paused by Bluefin; the user should wait and try later or use another pool.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L54"
+     },
+     "1013": {
+      "constant": "EInvalidCoins",
+      "meaning": "Both sides of the pool are the same coin; choose two different coins.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L57"
+     },
+     "1018": {
+      "constant": "ENonEmptyPosition",
+      "meaning": "The position still has liquidity, so it cannot be closed this way; remove all liquidity first.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L72"
+     },
+     "1019": {
+      "constant": "EPositionAndPoolDontMatch",
+      "meaning": "The position belongs to a different pool than the one selected; pick the matching pool.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L75"
+     },
+     "1021": {
+      "constant": "ERewardIndexNotFound",
+      "meaning": "The reward coin requested is not offered on this pool; refresh and claim only listed rewards.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L81"
+     },
+     "1022": {
+      "constant": "EInvalidLastUpdateTime",
+      "meaning": "Internal reward timing error; retry later or escalate.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L84"
+     },
+     "1023": {
+      "constant": "ENotAuthorized",
+      "meaning": "The wallet is not allowed to perform this admin/manager action.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L87"
+     },
+     "1026": {
+      "constant": "EInvalidTickSpacing",
+      "meaning": "The price step chosen for a new pool is above the allowed maximum; pick a supported tick spacing.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L96"
+     },
+     "1027": {
+      "constant": "EInvalidFeeRate",
+      "meaning": "The fee rate chosen for a new pool is above the allowed maximum; pick a supported fee tier.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L99"
+     },
+     "1029": {
+      "constant": "EZeroAmount",
+      "meaning": "The amount entered is zero; enter an amount greater than zero.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L105"
+     },
+     "1030": {
+      "constant": "EInvalidPoolPrice",
+      "meaning": "The starting price for the new pool is out of the allowed range; choose a realistic starting price.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L108"
+     },
+     "1035": {
+      "constant": "ECannotClosePositionWithFeeToClaim",
+      "meaning": "The position still has unclaimed fees; collect fees first, then close the position.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L120"
+     },
+     "1036": {
+      "constant": "EDeprecated",
+      "meaning": "The app called a retired Bluefin function; update or refresh the app.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L123"
+     },
+     "1038": {
+      "constant": "EFeeCoinNotSupported",
+      "meaning": "The coin chosen to pay the pool-creation fee is not accepted; pay with a supported coin.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L131"
+     },
+     "1039": {
+      "constant": "EInvalidPoolCreationFee",
+      "meaning": "The pool-creation fee paid is not the exact required amount; pay the exact fee.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L135"
+     },
+     "1040": {
+      "constant": "ESameValueProvided",
+      "meaning": "The new setting is the same as the current one; nothing to change.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L138"
+     }
+    },
+    "admin": {
+     "1003": {
+      "constant": "EInsufficientAmount",
+      "meaning": "The amount provided is less than what the action needs; add more funds or lower the amount.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L24"
+     },
+     "1020": {
+      "constant": "EInvalidTimestamp",
+      "meaning": "Reward timing is invalid (e.g. end time in the past); a reward-setup issue, not a regular user action.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L78"
+     },
+     "1023": {
+      "constant": "ENotAuthorized",
+      "meaning": "The wallet is not allowed to perform this admin/manager action.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L87"
+     },
+     "1025": {
+      "constant": "EInvalidProtocolFeeShare",
+      "meaning": "Admin set a protocol fee share above the maximum; not a user issue.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L93"
+     },
+     "1028": {
+      "constant": "EInvalidCardinality",
+      "meaning": "Admin set price-history size above the maximum; not a user issue.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L102"
+     },
+     "1029": {
+      "constant": "EZeroAmount",
+      "meaning": "The amount entered is zero; enter an amount greater than zero.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L105"
+     },
+     "1037": {
+      "constant": "ERewardAmountAndBalanceMismatch",
+      "meaning": "The reward amount does not match the coins provided; a reward-setup issue.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L127"
+     },
+     "1038": {
+      "constant": "EFeeCoinNotSupported",
+      "meaning": "The coin chosen to pay the pool-creation fee is not accepted; pay with a supported coin.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L131"
+     }
+    },
+    "gateway": {
+     "1010": {
+      "constant": "ESlippageExceeds",
+      "meaning": "The price moved past the user's slippage tolerance; raise slippage a bit or try a smaller amount.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L46"
+     },
+     "1033": {
+      "constant": "ECannotClaimZeroReward",
+      "meaning": "There are no rewards to claim for this position right now; try again later.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L117"
+     },
+     "1036": {
+      "constant": "EDeprecated",
+      "meaning": "The app called a retired Bluefin function; update or refresh the app.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L123"
+     }
+    },
+    "config": {
+     "1001": {
+      "constant": "EVersionMismatch",
+      "meaning": "The app is using an outdated Bluefin contract version; refresh or update the app and retry.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L18"
+     },
+     "1005": {
+      "constant": "EVersionMax",
+      "meaning": "Admin tried to bump the protocol version when it is already current; not a user issue.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L30"
+     },
+     "1031": {
+      "constant": "ERewardManagerNotFound",
+      "meaning": "The wallet is not a registered reward manager.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L111"
+     },
+     "1032": {
+      "constant": "EAlreadyARewardManager",
+      "meaning": "That address is already a reward manager; nothing to do.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L114"
+     }
+    },
+    "position": {
+     "1015": {
+      "constant": "EInsufficientLiquidity",
+      "meaning": "There is not enough liquidity for this amount (or in the position being withdrawn); try a smaller amount.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L63"
+     },
+     "1016": {
+      "constant": "EInvalidFeeGrowth",
+      "meaning": "Internal fee accounting check failed; not caused by the user, escalate to the app team.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L66"
+     },
+     "1017": {
+      "constant": "EAddCheckFailed",
+      "meaning": "An internal overflow check failed when updating the position; try a smaller amount or escalate.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L69"
+     },
+     "1024": {
+      "constant": "EUpdateRewardInfoCheckFailed",
+      "meaning": "Internal reward accounting check failed for the position; escalate to the app team.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L90"
+     }
+    },
+    "utils": {
+     "1004": {
+      "constant": "EInsufficientCoinBalance",
+      "meaning": "The wallet coin used does not hold enough balance for this action; top up or lower the amount.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L27"
+     },
+     "1015": {
+      "constant": "EInsufficientLiquidity",
+      "meaning": "There is not enough liquidity for this amount (or in the position being withdrawn); try a smaller amount.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L63"
+     }
+    },
+    "oracle": {
+     "1014": {
+      "constant": "EInvalidObservationTimestamp",
+      "meaning": "Internal price-history timing error; usually resolves on retry, otherwise escalate.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L60"
+     }
+    },
+    "i128H": {
+     "1036": {
+      "constant": "EDeprecated",
+      "meaning": "The app called a retired Bluefin function; update or refresh the app.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/errors.move#L123"
+     }
+    },
+    "bit_math": {
+     "0": {
+      "constant": "abort 0 (literal)",
+      "meaning": "Internal price-step lookup error; not caused by the user, retry or escalate.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/bit_math.move#L15"
+     }
+    },
+    "tick_bitmap": {
+     "0": {
+      "constant": "abort 0 (literal)",
+      "meaning": "The position's price bound is not on the pool's price step; adjust the range to valid steps.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/tick_bitmap.move#L37"
+     }
+    },
+    "clmm_math": {
+     "0": {
+      "constant": "ETOKEN_AMOUNT_MAX_EXCEEDED",
+      "meaning": "The swap needed more input than the user allowed; raise slippage or try a smaller amount.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/maths/clmm_math.move#L21"
+     },
+     "1": {
+      "constant": "ETOKEN_AMOUNT_MIN_SUBCEEDED",
+      "meaning": "The swap would return less than the minimum the user accepted; raise slippage or try a smaller amount.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/maths/clmm_math.move#L22"
+     },
+     "2": {
+      "constant": "EMULTIPLICATION_OVERFLOW",
+      "meaning": "The amount is too large for the pool math; try a smaller amount.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/maths/clmm_math.move#L23"
+     },
+     "4": {
+      "constant": "EINVALID_SQRT_PRICE_INPUT",
+      "meaning": "Internal price-direction check failed during the swap; refresh the quote and retry.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/maths/clmm_math.move#L24"
+     },
+     "3018": {
+      "constant": "EINVALID_FIXED_TOKEN_TYPE",
+      "meaning": "Internal error choosing which coin amount is fixed; retry from the app or escalate.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/maths/clmm_math.move#L25"
+     }
+    },
+    "tick_math": {
+     "1": {
+      "constant": "EINVALID_TICK",
+      "meaning": "The price bound chosen is outside the range the pool supports; pick a narrower range.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/maths/tick_math.move#L22"
+     },
+     "2": {
+      "constant": "EINVALID_SQRT_PRICE",
+      "meaning": "The price is outside the range the pool supports; pick a realistic price.",
+      "source": "https://github.com/fireflyprotocol/bluefin-spot-contracts-public/blob/cd7e167c91f92a06e996640239d9afafb9dd6d0d/sources/maths/tick_math.move#L23"
+     }
+    }
+   },
+   "hot": [
+    "0xd075338d105482f1527cbfd363d6413558f184dec36d9138a70261e87f486e9c"
+   ]
+  },
+  {
+   "key": "cetus",
+   "name": "Cetus CLMM",
+   "addresses": [
+    "0x1eabed72c53feb3805120a081dc15963c204dc8d091542592abaf7a35689b2fb",
+    "0xbd6d0f475ccdfd81ed148d70a2f84883d8c63f332d046215bd0ccf528290358e",
+    "0xfa36bcb799278bddaf295991b2d3ce039013b1dd60dfd7183dee135fdadbc4be",
+    "0xcfffc9eef305baa854565a229c719c07d1e6b8b67ce444995e21580fc1866919",
+    "0xc33c3e937e5aa2009cc0c3fdb3f345a0c3193d4ee663ffc601fe8b894fbc4ba6",
+    "0x70968826ad1b4ba895753f634b0aea68d0672908ca1075a2abdf0fc9e0b2fc6a",
+    "0x2b1e8820da53ff881de69f85c7c8c4f75c9b4bdd2a738b635b43559115a2bea4",
+    "0x157468379cfe5616c063ae39a889dd184ad48350d3e08f8d9b4ade22b8e3fb61",
+    "0xdc67d6de3f00051c505da10d8f6fbab3b3ec21ec65f0dc22a2f36c13fc102110",
+    "0xc6faf3703b0e8ba9ed06b7851134bbbe7565eb35ff823fd78432baa4cbeaa12e",
+    "0x687e4b27fd88de55f2d7023dc7a3ec07ccd28b6a45a35ac88e95b6c387a3e338",
+    "0x75b2e9ecad34944b8d0c874e568c90db0cf9437f0d7392abfd4cb902972f3e40",
+    "0xdb5cd62a06c79695bfc9982eb08534706d3752fe123b48e0144f480209b3117f",
+    "0x25ebb9a7c50eb17b3fa9c5a30fb8b5ad8f97caaf4928943acbcff7153dfee5e3",
+    "0x260693ec785a6e6c9d81d58c7d2ff72f1288ae0fa6a9725abe05a6478b11f084"
+   ],
+   "addressSources": [
+    "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/Published.toml",
+    "https://github.com/CetusProtocol/cetus-clmm-interface/blob/991f50e23dd0e34d134adb3b0ad4c1d30ab45e50/sui/cetus_clmm/Published.toml",
+    "Sui mainnet GraphQL packageVersions(address: 0x1eabed72c53feb3805120a081dc15963c204dc8d091542592abaf7a35689b2fb) -> versions 1-15 (https://graphql.mainnet.sui.io/graphql)"
+   ],
+   "errors": {
+    "factory": {
+     "1": {
+      "constant": "EPoolAlreadyExist",
+      "meaning": "A pool for this coin pair and fee tier already exists; add liquidity to the existing pool instead.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/factory.move#L42"
+     },
+     "2": {
+      "constant": "EInvalidSqrtPrice",
+      "meaning": "The starting price for the new pool is out of the allowed range; choose a realistic starting price.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/factory.move#L43"
+     },
+     "3": {
+      "constant": "ESameCoinType",
+      "meaning": "Both coins in the pool are the same; choose two different coins.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/factory.move#L44"
+     },
+     "4": {
+      "constant": "EAmountInAboveMaxLimit",
+      "meaning": "Creating the pool needs more of coin B than the user allowed; increase the amount or adjust the price range.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/factory.move#L45"
+     },
+     "5": {
+      "constant": "EAmountOutBelowMinLimit",
+      "meaning": "Creating the pool needs more of coin A than the user allowed; increase the amount or adjust the price range.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/factory.move#L46"
+     },
+     "6": {
+      "constant": "EInvalidCoinTypeSequence",
+      "meaning": "The two coins were given in the wrong order for pool creation; let the app swap the order and retry.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/factory.move#L47"
+     },
+     "7": {
+      "constant": "EQuoteCoinTypeNotInAllowedPairConfig",
+      "meaning": "The quote coin is not allowed for permissioned pool creation; pick a supported quote coin.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/factory.move#L48"
+     },
+     "8": {
+      "constant": "ETickSpacingNotInAllowedPairConfig",
+      "meaning": "The fee tier/price step chosen is not allowed for this pair; pick a supported fee tier.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/factory.move#L49"
+     },
+     "9": {
+      "constant": "EPoolKeyAlreadyRegistered",
+      "meaning": "This pool key is already registered; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/factory.move#L50"
+     },
+     "10": {
+      "constant": "EPoolKeyNotRegistered",
+      "meaning": "This pool key is not registered; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/factory.move#L51"
+     },
+     "11": {
+      "constant": "ECapAlreadyRegistered",
+      "meaning": "This pool-creator permission is already registered; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/factory.move#L52"
+     },
+     "12": {
+      "constant": "ECoinTypeNotAllowed",
+      "meaning": "One of the coins is not allowed (it may be on Cetus's deny list); pick a different coin.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/factory.move#L53"
+     },
+     "13": {
+      "constant": "ECapNotMatchWithCoinType",
+      "meaning": "The pool-creator permission does not match this coin; use the permission issued for this coin.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/factory.move#L54"
+     },
+     "14": {
+      "constant": "ECoinAlreadyExistsInList",
+      "meaning": "The coin is already on the list; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/factory.move#L55"
+     },
+     "15": {
+      "constant": "EcoinNotExistsInList",
+      "meaning": "The coin is not on the list; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/factory.move#L56"
+     },
+     "16": {
+      "constant": "ELiquidityCheckFailed",
+      "meaning": "Creating the pool requires a non-zero deposit of both coins; widen the price range so both coins are needed and retry.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/factory.move#L57"
+     },
+     "17": {
+      "constant": "ETickSpacingNotExistsInFeeTier",
+      "meaning": "The fee tier/price step chosen does not exist; pick a supported fee tier.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/factory.move#L58"
+     },
+     "18": {
+      "constant": "ETickSpacingAlreadyExistsInAllowedPairConfig",
+      "meaning": "That fee tier is already allowed; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/factory.move#L59"
+     },
+     "19": {
+      "constant": "EMethodDeprecated",
+      "meaning": "The app called a retired Cetus function; update or refresh the app.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/factory.move#L60"
+     },
+     "20": {
+      "constant": "EDenyCoinListNotExists",
+      "meaning": "The coin deny list is not set up; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/factory.move#L61"
+     },
+     "21": {
+      "constant": "EDenyCoinListAlreadyExists",
+      "meaning": "The coin deny list already exists; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/factory.move#L62"
+     },
+     "22": {
+      "constant": "EPermissionPairManagerNotExists",
+      "meaning": "The permissioned-pair manager is not set up; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/factory.move#L63"
+     },
+     "23": {
+      "constant": "EPermissionPairManagerAlreadyExists",
+      "meaning": "The permissioned-pair manager already exists; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/factory.move#L64"
+     },
+     "24": {
+      "constant": "ECoinAlreadyExistsInAllowedPairConfig",
+      "meaning": "That coin is already allowed; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/factory.move#L65"
+     },
+     "25": {
+      "constant": "ECoinNotExistsInAllowedPairConfig",
+      "meaning": "That coin is not in the allowed list; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/factory.move#L66"
+     }
+    },
+    "pool_creator": {
+     "1": {
+      "constant": "EPoolIsPermission",
+      "meaning": "This pair/fee tier can only be created by an approved project; pick another fee tier or ask the coin's team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool_creator.move#L12"
+     },
+     "2": {
+      "constant": "EInvalidTickLower",
+      "meaning": "The lower price of the range is not valid for this pool's price step; adjust the range.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool_creator.move#L14"
+     },
+     "3": {
+      "constant": "EInvalidTickUpper",
+      "meaning": "The upper price of the range is not valid for this pool's price step; adjust the range.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool_creator.move#L16"
+     },
+     "4": {
+      "constant": "ECapNotMatchWithPoolKey",
+      "meaning": "The pool-creator permission does not match this pool; use the matching permission.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool_creator.move#L17"
+     },
+     "5": {
+      "constant": "EInitSqrtPriceNotBetweenLowerAndUpper",
+      "meaning": "The starting price must be inside the chosen price range; widen the range or change the starting price.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool_creator.move#L18"
+     },
+     "6": {
+      "constant": "EMethodDeprecated",
+      "meaning": "The app called a retired Cetus function; update or refresh the app.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool_creator.move#L19"
+     }
+    },
+    "pool": {
+     "0": {
+      "constant": "EAmountIncorrect",
+      "meaning": "The pool does not hold enough of the coin for this flash loan, or the amount was wrong; try a smaller amount.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L67"
+     },
+     "1": {
+      "constant": "ELiquidityOverflow",
+      "meaning": "Adding this much liquidity would exceed the pool's limit; try a smaller amount.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L68"
+     },
+     "2": {
+      "constant": "ELiquidityUnderflow",
+      "meaning": "Trying to remove more liquidity than the pool or position has; lower the amount.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L70"
+     },
+     "3": {
+      "constant": "ELiquidityIsZero",
+      "meaning": "The liquidity amount is zero; enter a larger amount.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L71"
+     },
+     "4": {
+      "constant": "ENotEnoughLiquidity",
+      "meaning": "There is not enough liquidity in the pool for this trade; try a smaller amount.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L72"
+     },
+     "5": {
+      "constant": "ERemainderAmountUnderflow",
+      "meaning": "Internal swap accounting error; try a smaller amount or escalate.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L73"
+     },
+     "6": {
+      "constant": "ESwapAmountInOverflow",
+      "meaning": "The swap input amount is too large; try a smaller amount.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L74"
+     },
+     "7": {
+      "constant": "ESwapAmountOutOverflow",
+      "meaning": "The swap output amount is too large; try a smaller amount.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L75"
+     },
+     "8": {
+      "constant": "EFeeAmountOverflow",
+      "meaning": "The fee amount overflowed; try a smaller amount.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L76"
+     },
+     "9": {
+      "constant": "EInvalidFeeRate",
+      "meaning": "The fee rate is not valid; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L77"
+     },
+     "10": {
+      "constant": "EInvalidFixedCoinType",
+      "meaning": "Internal error choosing which coin amount is fixed; retry from the app.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L79"
+     },
+     "11": {
+      "constant": "EWrongSqrtPriceLimit",
+      "meaning": "The swap's price limit is on the wrong side of the current price; refresh the quote and retry.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L80"
+     },
+     "12": {
+      "constant": "EPoolIdIsError",
+      "meaning": "The pool given does not match the one expected (e.g. for a position or receipt); pick the right pool.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L81"
+     },
+     "13": {
+      "constant": "EPoolIsPaused",
+      "meaning": "This pool is temporarily paused by Cetus; wait and try later or use another pool.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L83"
+     },
+     "14": {
+      "constant": "EFlashSwapReceiptNotMatch",
+      "meaning": "The swap was settled against a different pool or wrong amount; retry the swap from the app.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L84"
+     },
+     "15": {
+      "constant": "EInvalidProtocolFeeRate",
+      "meaning": "The protocol fee rate is not valid; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L86"
+     },
+     "16": {
+      "constant": "EInvalidPartnerRefFeeRate",
+      "meaning": "The partner referral fee rate is not valid; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L87"
+     },
+     "17": {
+      "constant": "ERewardNotExist",
+      "meaning": "The reward coin requested is not offered on this pool; claim only listed rewards.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L88"
+     },
+     "18": {
+      "constant": "EAmountOutIsZero",
+      "meaning": "The swap would give back nothing (amount too small); increase the amount.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L89"
+     },
+     "19": {
+      "constant": "EPoolPositionNotMatch",
+      "meaning": "The position belongs to a different pool than the one selected; pick the matching pool.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L90"
+     },
+     "20": {
+      "constant": "EFlashLoanReceiptNotMatch",
+      "meaning": "The flash loan was repaid to a different pool or with the wrong amount; repay correctly.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L91"
+     },
+     "21": {
+      "constant": "EPoolSqrtPriceRestoreFailed",
+      "meaning": "An emergency price restore on the pool failed; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L93"
+     },
+     "22": {
+      "constant": "EPoolLiquidityRestoreFailed",
+      "meaning": "An emergency liquidity restore on the pool failed; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L95"
+     },
+     "23": {
+      "constant": "ECannotCloseAttackedPosition",
+      "meaning": "This position was affected by the Cetus incident and cannot be closed normally yet; direct the user to Cetus's recovery process.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L96"
+     },
+     "24": {
+      "constant": "EPoolNotPaused",
+      "meaning": "This admin action needs the pool to be paused first; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L97"
+     },
+     "25": {
+      "constant": "EOperationNotPermitted",
+      "meaning": "Adding liquidity is currently not allowed on this pool; try later or use another pool.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L98"
+     },
+     "26": {
+      "constant": "EPublisherNotMatchWithModule",
+      "meaning": "Display/publisher setup does not match; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L99"
+     },
+     "27": {
+      "constant": "EInvalidRemovePercent",
+      "meaning": "The removal percentage is above 100%; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L100"
+     },
+     "28": {
+      "constant": "EFundWithdrawalFailed",
+      "meaning": "An internal fund withdrawal failed; escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L102"
+     },
+     "29": {
+      "constant": "EInvalidCutValue",
+      "meaning": "An internal recovery value was invalid; escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L104"
+     },
+     "30": {
+      "constant": "EPoolCurrentTickIndexOutOfRange",
+      "meaning": "The pool's current price is outside the allowed range; escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L105"
+     },
+     "31": {
+      "constant": "EPoolHasNoPositionSnapshot",
+      "meaning": "No recovery snapshot exists for this pool; the position may not be eligible for recovery.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L106"
+     },
+     "32": {
+      "constant": "EDeprecatedFunction",
+      "meaning": "The app called a retired Cetus function; update or refresh the app.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L107"
+     },
+     "33": {
+      "constant": "ENoProtocolFee",
+      "meaning": "There are no protocol fees to collect; nothing to do.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L108"
+     },
+     "34": {
+      "constant": "EProtocolFeeNotEnough",
+      "meaning": "Not enough protocol fees to collect that amount; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L109"
+     },
+     "35": {
+      "constant": "EPositionPendingAddLiquidity",
+      "meaning": "A liquidity add on this pool is still in progress in the same transaction; let the app finish and retry.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L110"
+     },
+     "36": {
+      "constant": "EAmountOutLessThanMinAmount",
+      "meaning": "Removing liquidity would return less than the minimum the user accepted (price moved); raise slippage and retry.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/pool.move#L111"
+     }
+    },
+    "position": {
+     "0": {
+      "constant": "ERemainderAmountUnderflow",
+      "meaning": "Internal position accounting error; escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/position.move#L47"
+     },
+     "1": {
+      "constant": "EFeeOwnedOverflow",
+      "meaning": "The position's fee total overflowed; collect fees and retry.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/position.move#L48"
+     },
+     "2": {
+      "constant": "ERewardOwnedOverflow",
+      "meaning": "The position's reward total overflowed; claim rewards and retry.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/position.move#L49"
+     },
+     "3": {
+      "constant": "EPointsOwnedOverflow",
+      "meaning": "The position's points total overflowed; escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/position.move#L50"
+     },
+     "4": {
+      "constant": "EInvalidDeltaLiquidity",
+      "meaning": "The liquidity change is invalid (zero or more than the position holds); adjust the amount.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/position.move#L52"
+     },
+     "5": {
+      "constant": "EInvalidPositionTickRange",
+      "meaning": "The position's price range is invalid (lower not below upper, out of bounds, or off the price step); adjust the range.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/position.move#L53"
+     },
+     "6": {
+      "constant": "EPositionNotExist",
+      "meaning": "This position does not exist in the pool (it may already be closed); refresh positions.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/position.move#L54"
+     },
+     "7": {
+      "constant": "EPositionIsNotEmpty",
+      "meaning": "The position still has liquidity, fees or rewards; remove liquidity and collect everything before closing.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/position.move#L55"
+     },
+     "8": {
+      "constant": "ELiquidityChangeOverflow",
+      "meaning": "Adding this much liquidity to the position is too large; try a smaller amount.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/position.move#L56"
+     },
+     "9": {
+      "constant": "ELiquidityChangeUnderflow",
+      "meaning": "Trying to remove more liquidity than the position has; lower the amount.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/position.move#L57"
+     },
+     "10": {
+      "constant": "EInvalidRewardIndex",
+      "meaning": "The reward requested does not exist for this position; claim only listed rewards.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/position.move#L58"
+     },
+     "11": {
+      "constant": "EPublisherNotMatchWithModule",
+      "meaning": "Display/publisher setup does not match; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/position.move#L59"
+     }
+    },
+    "tick": {
+     "0": {
+      "constant": "ELiquidityOverflow",
+      "meaning": "Too much liquidity at this price point; try a smaller amount.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/tick.move#L14"
+     },
+     "1": {
+      "constant": "ELiquidityUnderflow",
+      "meaning": "Trying to remove more liquidity than exists at this price point; lower the amount.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/tick.move#L15"
+     },
+     "2": {
+      "constant": "EInvalidTick",
+      "meaning": "The price bound is not valid for this pool; adjust the range.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/tick.move#L16"
+     },
+     "3": {
+      "constant": "ETickNotFound",
+      "meaning": "The price point was not found in the pool; refresh and retry.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/tick.move#L17"
+     }
+    },
+    "rewarder": {
+     "1": {
+      "constant": "ERewardSoltIsFull",
+      "meaning": "The pool already has the maximum number of reward coins; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/rewarder.move#L32"
+     },
+     "2": {
+      "constant": "ERewardAlreadyExist",
+      "meaning": "That reward coin is already set up on the pool; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/rewarder.move#L33"
+     },
+     "3": {
+      "constant": "EInvalidTime",
+      "meaning": "The reward time is invalid; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/rewarder.move#L34"
+     },
+     "4": {
+      "constant": "ERewardAmountInsufficient",
+      "meaning": "Not enough reward coins are deposited for the chosen emission rate; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/rewarder.move#L35"
+     },
+     "5": {
+      "constant": "ERewardNotExist",
+      "meaning": "That reward coin is not set up on this pool; claim only listed rewards.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/rewarder.move#L36"
+     },
+     "6": {
+      "constant": "ERewardCoinNotEnough",
+      "meaning": "The reward vault does not hold enough coins to pay this out right now; try again later and report it.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/rewarder.move#L37"
+     }
+    },
+    "partner": {
+     "1": {
+      "constant": "EPartnerAlreadyExist",
+      "meaning": "A partner with that name already exists; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/partner.move#L24"
+     },
+     "2": {
+      "constant": "EInvalidTime",
+      "meaning": "The partner start/end time is invalid; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/partner.move#L25"
+     },
+     "3": {
+      "constant": "EInvalidPartnerRefFeeRate",
+      "meaning": "The partner referral fee rate is invalid; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/partner.move#L26"
+     },
+     "4": {
+      "constant": "EInvalidPartnerCap",
+      "meaning": "The partner permission does not match this partner; use the matching partner key.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/partner.move#L27"
+     },
+     "5": {
+      "constant": "EInvalidCoinType",
+      "meaning": "The coin type requested is not held by this partner account.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/partner.move#L28"
+     },
+     "6": {
+      "constant": "EInvalidPartnerName",
+      "meaning": "The partner name is empty or invalid; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/partner.move#L29"
+     },
+     "7": {
+      "constant": "EDeprecatedFunction",
+      "meaning": "The app called a retired Cetus function; update or refresh the app.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/partner.move#L30"
+     }
+    },
+    "position_snapshot": {
+     "1": {
+      "constant": "EPositionSnapshotAlreadyExists",
+      "meaning": "A recovery snapshot for this position already exists; nothing to do.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/position_snapshot.move#L11"
+     },
+     "2": {
+      "constant": "EPositionSnapshotNotFound",
+      "meaning": "No recovery snapshot exists for this position; it may not be eligible for recovery.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/position_snapshot.move#L12"
+     }
+    },
+    "acl": {
+     "0": {
+      "constant": "ERoleNumberTooLarge",
+      "meaning": "Invalid role number; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/acl.move#L13"
+     },
+     "1": {
+      "constant": "ERoleNotFound",
+      "meaning": "Role not found; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/acl.move#L15"
+     },
+     "2": {
+      "constant": "EMemberNotFound",
+      "meaning": "Member not found; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/acl.move#L17"
+     }
+    },
+    "config": {
+     "1": {
+      "constant": "EFeeTierAlreadyExist",
+      "meaning": "That fee tier already exists; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/config.move#L70"
+     },
+     "2": {
+      "constant": "EFeeTierNotFound",
+      "meaning": "The fee tier chosen does not exist; pick a supported fee tier.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/config.move#L71"
+     },
+     "3": {
+      "constant": "EInvalidFeeRate",
+      "meaning": "The fee rate is above the allowed maximum; pick a supported fee tier.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/config.move#L72"
+     },
+     "4": {
+      "constant": "EInvalidProtocolFeeRate",
+      "meaning": "The protocol fee rate is invalid; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/config.move#L73"
+     },
+     "5": {
+      "constant": "ENoPoolManagerPemission",
+      "meaning": "The wallet lacks pool-manager permission for this action.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/config.move#L74"
+     },
+     "6": {
+      "constant": "ENoFeeTierManagerPermission",
+      "meaning": "The wallet lacks fee-tier-manager permission for this action.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/config.move#L75"
+     },
+     "7": {
+      "constant": "ENoPartnerManagerPermission",
+      "meaning": "The wallet lacks partner-manager permission for this action.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/config.move#L76"
+     },
+     "8": {
+      "constant": "ENoRewarderManagerPermission",
+      "meaning": "The wallet lacks reward-manager permission for this action.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/config.move#L77"
+     },
+     "9": {
+      "constant": "ENoProtocolFeeClaimPermission",
+      "meaning": "The wallet lacks permission to claim protocol fees.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/config.move#L78"
+     },
+     "10": {
+      "constant": "EPackageVersionDeprecate",
+      "meaning": "The app is using an outdated Cetus contract version; refresh or update the app and retry.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/config.move#L79"
+     },
+     "11": {
+      "constant": "EInvalidTickSpacing",
+      "meaning": "The price step is invalid; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/config.move#L80"
+     },
+     "12": {
+      "constant": "EConfigVersionNotEqualEmergencyRestoreVersion",
+      "meaning": "Cetus is in an emergency-restore state; the action is blocked for now, try later.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/config.move#L81"
+     },
+     "13": {
+      "constant": "ENoEmergencyPausePermission",
+      "meaning": "The wallet lacks emergency-pause permission.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/config.move#L82"
+     },
+     "14": {
+      "constant": "EProtocolNotEmergencyPause",
+      "meaning": "The protocol is not in emergency pause; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/config.move#L83"
+     },
+     "15": {
+      "constant": "EProtocolAlreadyEmergencyPause",
+      "meaning": "Cetus is in emergency pause; all actions are blocked for now, try later.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/config.move#L84"
+     },
+     "16": {
+      "constant": "EInvalidPackageVersion",
+      "meaning": "The package version is invalid; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/config.move#L85"
+     },
+     "17": {
+      "constant": "ENoEmergencyUnpausePermission",
+      "meaning": "The wallet lacks emergency-unpause permission.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/config.move#L86"
+     }
+    },
+    "tick_math": {
+     "1": {
+      "constant": "EINVALID_TICK",
+      "meaning": "The price bound is outside the range Cetus supports; pick a narrower range.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/math/tick_math.move#L15"
+     },
+     "2": {
+      "constant": "EINVALID_SQRT_PRICE",
+      "meaning": "The price is outside the range Cetus supports; pick a realistic price.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/math/tick_math.move#L17"
+     },
+     "3": {
+      "constant": "EINVALID_TICK_SPACING",
+      "meaning": "The price step is zero; an admin/configuration action failed; not something a regular user did, escalate to the app team.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/math/tick_math.move#L19"
+     }
+    },
+    "clmm_math": {
+     "0": {
+      "constant": "ETOKEN_AMOUNT_MAX_EXCEEDED",
+      "meaning": "The action needed more coins than allowed; raise slippage or use a smaller amount.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/math/clmm_math.move#L11"
+     },
+     "1": {
+      "constant": "ETOKEN_AMOUNT_MIN_SUBCEEDED",
+      "meaning": "The action would return fewer coins than the minimum accepted; raise slippage or use a smaller amount.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/math/clmm_math.move#L13"
+     },
+     "2": {
+      "constant": "EMULTIPLICATION_OVERFLOW",
+      "meaning": "The amount is too large for the pool math; try a smaller amount.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/math/clmm_math.move#L15"
+     },
+     "3": {
+      "constant": "EINTEGER_DOWNCAST_OVERFLOW",
+      "meaning": "The amount is too large for the pool math; try a smaller amount.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/math/clmm_math.move#L18"
+     },
+     "4": {
+      "constant": "EINVALID_SQRT_PRICE_INPUT",
+      "meaning": "Internal price-direction check failed; refresh the quote and retry.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/math/clmm_math.move#L20"
+     },
+     "5": {
+      "constant": "ESUBTRACTION_UNDERFLOW",
+      "meaning": "Internal math underflow; try a different amount or escalate.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/math/clmm_math.move#L22"
+     },
+     "6": {
+      "constant": "EAMOUNT_CAST_TO_U64_OVERFLOW",
+      "meaning": "The resulting coin amount is too large; try a smaller amount.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/math/clmm_math.move#L24"
+     },
+     "7": {
+      "constant": "EAMOUNT_CAST_TO_U128_OVERFLOW",
+      "meaning": "The resulting amount is too large; try a smaller amount.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/math/clmm_math.move#L26"
+     },
+     "8": {
+      "constant": "EINVALID_TICK_RANGE",
+      "meaning": "The price range is invalid (lower not below upper); adjust the range.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/math/clmm_math.move#L28"
+     },
+     "3018": {
+      "constant": "EINVALID_FIXED_TOKEN_TYPE",
+      "meaning": "Internal error choosing which coin amount is fixed; retry from the app.",
+      "source": "https://github.com/CetusProtocol/cetus-contracts/blob/4e6147ed5584def9eb6b8e36ef7e62ccb7551fd3/packages/cetus_clmm/sources/math/clmm_math.move#L30"
+     }
+    }
+   },
+   "hot": [
+    "0x260693ec785a6e6c9d81d58c7d2ff72f1288ae0fa6a9725abe05a6478b11f084"
+   ]
+  },
+  {
+   "key": "aftermath-perps",
+   "name": "Aftermath Perpetuals",
+   "addresses": [
+    "0x3ec740df8428aa9c93aaef7f8cc1542ac3194fd014826b51bfe245346d64efc7"
+   ],
+   "addressSources": [
+    "https://github.com/AftermathFinance/move-interfaces/blob/7b7c336f3451054034396304cb921851e0d602c9/packages/iperps/perpetuals/Move.toml"
+   ],
+   "errors": {},
+   "hot": [
+    "0x3ec740df8428aa9c93aaef7f8cc1542ac3194fd014826b51bfe245346d64efc7"
+   ]
+  }
+ ]
+}

@@ -9,7 +9,7 @@ type PackageMap = {
   errors: Record<string, Record<string, SourceEntry>>;
 };
 
-const PACKAGES = (maps as { packages: PackageMap[] }).packages;
+const PACKAGES = (maps as unknown as { packages: PackageMap[] }).packages;
 
 export type FailureKind = "move_abort" | "out_of_gas" | "other_failure" | "success" | "not_found";
 

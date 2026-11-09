@@ -20,7 +20,7 @@ for (const p of pkgs) {
   for (let i = 0; i < WINDOWS; i++) {
     const end = cp - Math.floor((i * DAYS * DAY) / WINDOWS) - 50;
     const start = end - 400;
-    for (const addr of p.addresses.slice(0, 3)) {
+    for (const addr of p.hot?.length ? p.hot : p.addresses.slice(-1)) {
       try {
         const txs = await txsCallingPackage(addr, start, end, 50);
         for (const t of txs) {

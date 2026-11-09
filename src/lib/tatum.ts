@@ -123,12 +123,24 @@ export function normaliseTx(raw: RawTx): ChainTx {
   };
 }
 
+// Executed transactions never change, so a lookup by digest can be cached.
+const g = globalThis as unknown as { __txCache?: Map<string, ChainTx> };
+const txCache = (g.__txCache ??= new Map());
+export function rememberTx(tx: ChainTx) {
+  if (txCache.size > 2000) txCache.delete(txCache.keys().next().value as string);
+  txCache.set(tx.digest, tx);
+}
+
 export async function getTransaction(digest: string): Promise<ChainTx | null> {
+  const hit = txCache.get(digest);
+  if (hit) return hit;
   const data = await tatumGraphql<{ transaction: RawTx | null }>(
     `query($d: String!) { transaction(digest: $d) { ${TX_FIELDS} } }`,
     { d: digest },
   );
-  return data.transaction ? normaliseTx(data.transaction) : null;
+  const tx = data.transaction ? normaliseTx(data.transaction) : null;
+  if (tx) rememberTx(tx);
+  return tx;
 }
 
 export async function latestCheckpoint(): Promise<number> {
@@ -151,5 +163,7 @@ export async function txsCallingPackage(pkg: string, afterCheckpoint: number, be
     `query($p: String!, $a: UInt53!, $b: UInt53!, $n: Int!) { transactions(first: $n, filter: { function: $p, afterCheckpoint: $a, beforeCheckpoint: $b }) { nodes { ${TX_FIELDS} } } }`,
     { p: pkg, a: afterCheckpoint, b: beforeCheckpoint, n: first },
   );
-  return data.transactions.nodes.map(normaliseTx);
+  const txs = data.transactions.nodes.map(normaliseTx);
+  txs.forEach(rememberTx);
+  return txs;
 }
