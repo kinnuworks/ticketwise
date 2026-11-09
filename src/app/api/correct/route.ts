@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { learn, TEAM_NS, type Correction } from "@/lib/memory";
+import { learn, store, TEAM_NS, type Correction } from "@/lib/memory";
 import { isTeammate, json, limit, readNamespaces } from "@/lib/guard";
 
 export const runtime = "nodejs";
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     const t = Date.now();
     const { blobId, text } = await learn(record, ns);
     if (!team) (await cookies()).set("tw_taught", "1", { httpOnly: true, sameSite: "lax", maxAge: 60 * 60 * 24 * 30, path: "/" });
-    return json({ ok: true, namespace: ns, team, blobId, text, ms: Date.now() - t });
+    return json({ ok: true, mode: store().mode, namespace: ns, team, blobId, text, ms: Date.now() - t });
   } catch (e) {
     return json({ error: e instanceof Error ? e.message : "Could not save to Walrus Memory" }, 502);
   }
