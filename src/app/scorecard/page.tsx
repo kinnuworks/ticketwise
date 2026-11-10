@@ -1,4 +1,7 @@
 import sc from "@/data/scorecard.json";
+import cv from "@/data/curve.json";
+
+type Curve = { days: { day: string; tickets: number; answered: number; newErrors: number; pct: number }[]; total: { tickets: number; answered: number; pct: number }; distinctErrors: number };
 
 type Score = {
   pending?: boolean;
@@ -61,7 +64,37 @@ export default function Scorecard() {
             </div>
           </section>
 
+
           <section className="section section--alt">
+            <div className="container">
+              <div className="section-head section-head--left">
+                <span className="eyebrow">
+                  <span className="dot" /> Learning curve, from empty memory
+                </span>
+                <h3>Day one knows nothing. Day two answers almost everything.</h3>
+                <p className="prose-small" style={{ marginTop: 12 }}>
+                  The same {(cv as Curve).total.tickets} failures, played forward one day at a time against a fresh Walrus Memory
+                  namespace. Each day&apos;s tickets are answered only from corrections taught on earlier days; at the end of the day the
+                  team teaches each new error once. {(cv as Curve).total.answered} of {(cv as Curve).total.tickets} tickets (
+                  {(cv as Curve).total.pct}%) were answered from memory with {(cv as Curve).distinctErrors} corrections. Tickets for an error
+                  nobody had taught yet count as unanswered.
+                </p>
+              </div>
+              <div className="curve">
+                {(cv as Curve).days.map((d) => (
+                  <div className="curve__col" key={d.day}>
+                    <span className="curve__pct t-mono">{d.pct}%</span>
+                    <div className="curve__bar">
+                      <div className="curve__fill" style={{ height: `${Math.max(d.pct, 2)}%` }} />
+                    </div>
+                    <span className="curve__day t-mono">{d.day.slice(5)}</span>
+                    {d.newErrors > 0 && <span className="curve__new">+{d.newErrors} taught</span>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+          <section className="section">
             <div className="container">
               <div className="section-head section-head--left">
                 <span className="eyebrow">

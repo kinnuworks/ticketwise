@@ -1,0 +1,117 @@
+{
+ "ranAt": "2026-11-10T15:45:42.819Z",
+ "store": "walrus",
+ "namespace": "ticketwise-curve-2026-11-10",
+ "days": [
+  {
+   "day": "2026-10-29",
+   "tickets": 62,
+   "answered": 0,
+   "newErrors": 9,
+   "taughtSoFar": 9,
+   "pct": 0
+  },
+  {
+   "day": "2026-10-30",
+   "tickets": 67,
+   "answered": 67,
+   "newErrors": 0,
+   "taughtSoFar": 9,
+   "pct": 100
+  },
+  {
+   "day": "2026-10-31",
+   "tickets": 79,
+   "answered": 79,
+   "newErrors": 0,
+   "taughtSoFar": 9,
+   "pct": 100
+  },
+  {
+   "day": "2026-11-01",
+   "tickets": 67,
+   "answered": 67,
+   "newErrors": 0,
+   "taughtSoFar": 9,
+   "pct": 100
+  },
+  {
+   "day": "2026-11-02",
+   "tickets": 41,
+   "answered": 41,
+   "newErrors": 0,
+   "taughtSoFar": 9,
+   "pct": 100
+  },
+  {
+   "day": "2026-11-03",
+   "tickets": 39,
+   "answered": 39,
+   "newErrors": 0,
+   "taughtSoFar": 9,
+   "pct": 100
+  },
+  {
+   "day": "2026-11-04",
+   "tickets": 71,
+   "answered": 67,
+   "newErrors": 1,
+   "taughtSoFar": 10,
+   "pct": 94
+  },
+  {
+   "day": "2026-11-05",
+   "tickets": 41,
+   "answered": 41,
+   "newErrors": 0,
+   "taughtSoFar": 10,
+   "pct": 100
+  },
+  {
+   "day": "2026-11-06",
+   "tickets": 63,
+   "answered": 63,
+   "newErrors": 0,
+   "taughtSoFar": 10,
+   "pct": 100
+  },
+  {
+   "day": "2026-11-07",
+   "tickets": 40,
+   "answered": 40,
+   "newErrors": 0,
+   "taughtSoFar": 10,
+   "pct": 100
+  },
+  {
+   "day": "2026-11-08",
+   "tickets": 34,
+   "answered": 34,
+   "newErrors": 0,
+   "taughtSoFar": 10,
+   "pct": 100
+  },
+  {
+   "day": "2026-11-09",
+   "tickets": 49,
+   "answered": 49,
+   "newErrors": 0,
+   "taughtSoFar": 10,
+   "pct": 100
+  },
+  {
+   "day": "2026-11-10",
+   "tickets": 8,
+   "answered": 8,
+   "newErrors": 0,
+   "taughtSoFar": 10,
+   "pct": 100
+  }
+ ],
+ "total": {
+  "tickets": 661,
+  "answered": 595,
+  "pct": 90
+ },
+ "distinctErrors": 10
+}

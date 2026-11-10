@@ -134,3 +134,11 @@ a.mono-chip:hover { background: color-mix(in oklab, var(--accent) 14%, var(--sur
 .term__dim { color: #8c93a8; }
 .term__tool { display: inline-block; padding: 2px 8px; border-radius: 6px; background: rgba(91, 140, 255, 0.18); color: #9fb8ff; }
 .split > * { min-width: 0; }
+.curve { display: grid; grid-template-columns: repeat(13, minmax(0, 1fr)); gap: 8px; align-items: end; padding: 24px; border-radius: var(--r-lg); background: var(--surface); box-shadow: var(--ring); }
+.curve__col { display: grid; justify-items: center; gap: 6px; }
+.curve__bar { width: 100%; max-width: 44px; height: 180px; border-radius: 8px; background: var(--tint); display: flex; align-items: flex-end; overflow: hidden; }
+.curve__fill { width: 100%; border-radius: 8px; background: linear-gradient(180deg, var(--accent-hi), var(--accent)); }
+.curve__pct { font-size: 12px; color: var(--ink-2); }
+.curve__day { font-size: 11px; color: var(--ink-3); }
+.curve__new { font-size: 11px; color: var(--warn); font-weight: 600; text-align: center; }
+@media (max-width: 640px) { .curve { gap: 3px; padding: 14px; } .curve__pct, .curve__day { font-size: 9px; } .curve__bar { height: 120px; } }
