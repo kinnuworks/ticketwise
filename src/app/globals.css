@@ -127,3 +127,10 @@ a.mono-chip:hover { background: color-mix(in oklab, var(--accent) 14%, var(--sur
 
 .prose-small { max-width: 680px; font-size: var(--fs-small); color: var(--ink-3); line-height: 1.6; }
 .footer a:hover { color: var(--ink); }
+
+/* MCP section */
+.mcp-cmd { margin-top: 18px; padding: 12px 16px; border-radius: var(--r-md); background: #0f1220; color: #dfe6ff; font-size: 13px; overflow-x: auto; white-space: nowrap; }
+.term { margin: 0; padding: 20px 22px 24px; font: 500 13.5px/1.6 var(--font-mono); color: #e9ecf6; white-space: pre-wrap; min-height: 260px; }
+.term__dim { color: #8c93a8; }
+.term__tool { display: inline-block; padding: 2px 8px; border-radius: 6px; background: rgba(91, 140, 255, 0.18); color: #9fb8ff; }
+.split > * { min-width: 0; }

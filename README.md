@@ -34,9 +34,25 @@ Ticketwise handles that loop:
 - **Tatum** is how every answer starts. The diagnosis comes from mainnet data read through `sui-mainnet.gateway.tatum.io`, not from the user's description. The live "Use a real failed transaction" button samples recent failures from DeepBook, Cetus, Bluefin and Aftermath through Tatum.
 - **Walrus Memory** is where the team's knowledge lives. Corrections and rules are written with `remember`, found with `recall`, listed on the Proof page with links to each blob on Walruscan, and can be rebuilt with `restore` after the relayer's index is deleted.
 
+## Same memory from any MCP client
+
+Ticketwise is also a read-only MCP server at `https://ticketwise-gamma.vercel.app/api/mcp` (streamable HTTP). A coding assistant or another agent can read what support taught, from the same Walrus Memory namespace the inbox uses:
+
+```bash
+claude mcp add --transport http ticketwise https://ticketwise-gamma.vercel.app/api/mcp
+```
+
+| Tool | What it returns |
+|---|---|
+| `triage_ticket` | Reads the failed transaction through Tatum and answers from the team's corrections |
+| `lookup_error` | What the team taught about one error key, such as `deepbook::big_vector#5`, with the Walrus blob |
+| `list_team_memory` | How many memories the team has on Walrus, and the escalation rule in force |
+
+Writes stay in the inbox, behind the team passcode, because they spend the shared Walrus quota.
+
 ## Proof it works
 
-- **Replay scorecard** (`/scorecard`): 661 real failed transactions from DeepBook v3, Cetus CLMM and Bluefin Spot over 21 days, read through Tatum. Corrections were taught from the first 435, split by time. Of the last 226, 0 were answered with team knowledge with memory off, and 226 with memory on. Every error in the later part had already appeared in the earlier part. An error that only appears later would stay unanswered until someone teaches it.
+- **Replay scorecard** (`/scorecard`): 661 real failed transactions from DeepBook v3, Cetus CLMM and Bluefin Spot over 13 days (Oct 29 to Nov 10), read through Tatum. Corrections were taught from the first 435, split by time. Of the last 226, 0 were answered with team knowledge with memory off, and 226 with memory on. Every error in the later part had already appeared in the earlier part. An error that only appears later would stay unanswered until someone teaches it.
 - **Durability check** (`/proof`): save a correction, delete the relayer's search index for that namespace, show recall coming back empty, restore from Walrus, recall again. The last run on the live deployment restored 1 of 1 memories in 4.5 s.
 - **Team memory** (`/proof`): every memory in the team namespace, with its Walruscan link.
 

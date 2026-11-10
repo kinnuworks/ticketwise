@@ -3,7 +3,7 @@
  "store": "walrus",
  "namespace": "ticketwise-replay",
  "replayBuiltAt": "2026-11-10T08:17:12.186Z",
- "days": 21,
+ "days": 13,
  "packages": [
   "DeepBook v3",
   "Cetus CLMM",

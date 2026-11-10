@@ -115,8 +115,53 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="section" id="mcp">
+        <div className="container split split--flip">
+          <div>
+            <span className="eyebrow">
+              <span className="dot" /> Same memory, any tool
+            </span>
+            <h3>What support learned, inside your editor.</h3>
+            <p className="t-small">
+              Ticketwise is also an MCP server. Add it to your coding assistant or another agent, and it can triage a ticket or
+              look up what the team taught about an error, from the same Walrus Memory the inbox reads. The engineer fixing the
+              bug sees what support already knows.
+            </p>
+            <p className="t-small">Read-only on purpose. Teaching stays in the inbox, behind the team passcode.</p>
+            <div className="mcp-cmd">
+              <span className="t-mono">claude mcp add --transport http ticketwise https://ticketwise-gamma.vercel.app/api/mcp</span>
+            </div>
+            <div className="chips" style={{ marginTop: 16 }}>
+              <span className="chip t-mono">triage_ticket</span>
+              <span className="chip t-mono">lookup_error</span>
+              <span className="chip t-mono">list_team_memory</span>
+            </div>
+          </div>
+          <div className="stage stage--soft reveal">
+            <div className="window window--dark" aria-hidden="true">
+              <div className="window__bar">
+                <div className="lights">
+                  <i />
+                  <i />
+                  <i />
+                </div>
+                <span className="window__title">terminal</span>
+              </div>
+              <pre className="term">
+                <span className="term__dim">{"> "}</span>
+                {"why do DeepBook cancels fail with big_vector abort 5?\n\n"}
+                <span className="term__tool">{"ticketwise · lookup_error"}</span>
+                {"  deepbook::big_vector#5\n\n"}
+                {"The order was already filled, canceled or\nexpired before the cancel reached the chain.\n\n"}
+                <span className="term__dim">{"Queue: Trading · taught by Maya on 2026-11-10\nStored on Walrus: walruscan.com/mainnet/blob/6bhP…"}</span>
+              </pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {!score.pending && (
-        <section className="section">
+        <section className="section section--alt">
           <div className="container split">
             <div>
               <span className="eyebrow">
@@ -162,7 +207,7 @@ export default function Home() {
         </section>
       )}
 
-      <section className="section section--alt why">
+      <section className="section why">
         <div className="container">
           <div className="section-head">
             <span className="eyebrow">
