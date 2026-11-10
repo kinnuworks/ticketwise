@@ -1,1 +1,81 @@
-{"pending": true}
+{
+ "ranAt": "2026-11-10T08:21:45.496Z",
+ "store": "walrus",
+ "namespace": "ticketwise-replay",
+ "replayBuiltAt": "2026-11-10T08:17:12.186Z",
+ "days": 21,
+ "packages": [
+  "DeepBook v3",
+  "Cetus CLMM",
+  "Bluefin Spot (CLMM)"
+ ],
+ "split": {
+  "cutCheckpoint": 341836756,
+  "train": 435,
+  "test": 226
+ },
+ "distinct": {
+  "all": 10,
+  "taught": 10,
+  "test": 8
+ },
+ "withoutMemory": {
+  "answered": 0,
+  "of": 226
+ },
+ "withMemory": {
+  "answered": 226,
+  "correctMeaning": 226,
+  "of": 226
+ },
+ "perKey": {
+  "bluefin::pool#1010": {
+   "n": 9,
+   "answered": 9,
+   "taughtEarlier": true,
+   "constant": "ESlippageExceeds"
+  },
+  "bluefin::clmm_math#3018": {
+   "n": 38,
+   "answered": 38,
+   "taughtEarlier": true,
+   "constant": "EINVALID_FIXED_TOKEN_TYPE"
+  },
+  "cetus::pool#11": {
+   "n": 54,
+   "answered": 54,
+   "taughtEarlier": true,
+   "constant": "EWrongSqrtPriceLimit"
+  },
+  "deepbook::big_vector#5": {
+   "n": 76,
+   "answered": 76,
+   "taughtEarlier": true,
+   "constant": "ENotFound"
+  },
+  "bluefin::gateway#1033": {
+   "n": 2,
+   "answered": 2,
+   "taughtEarlier": true,
+   "constant": "ECannotClaimZeroReward"
+  },
+  "deepbook::balance_manager#3": {
+   "n": 23,
+   "answered": 23,
+   "taughtEarlier": true,
+   "constant": "EBalanceManagerBalanceTooLow"
+  },
+  "bluefin::pool#1009": {
+   "n": 23,
+   "answered": 23,
+   "taughtEarlier": true,
+   "constant": "EInvalidPriceLimit"
+  },
+  "bluefin::pool#1018": {
+   "n": 1,
+   "answered": 1,
+   "taughtEarlier": true,
+   "constant": "ENonEmptyPosition"
+  }
+ }
+}

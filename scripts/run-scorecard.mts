@@ -36,11 +36,14 @@ if (process.env.TEACH !== "0") {
   }
 }
 let hit = 0, right = 0;
+const recalled = new Map<string, Awaited<ReturnType<typeof recallForKey>>>();
 const perKey: Record<string, { n: number; answered: number; taughtEarlier: boolean; constant: string | null }> = {};
 for (const i of test) {
   const k = (perKey[i.key] ??= { n: 0, answered: 0, taughtEarlier: taught.has(i.key), constant: entry(i)?.constant ?? null });
   k.n++;
-  const r = await recallForKey(i.key, [NS]);
+  // One Walrus recall per distinct key (the answer depends only on the key); keeps us inside the relayer's rate limit.
+  if (!recalled.has(i.key)) recalled.set(i.key, await recallForKey(i.key, [NS]));
+  const r = recalled.get(i.key);
   if (r) {
     hit++;
     k.answered++;
