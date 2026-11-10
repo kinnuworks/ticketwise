@@ -427,7 +427,7 @@ function TicketResult({
           <div className="note note--learned">
             <CheckCircle />
             <span>
-              Learned from {a.learnedFrom.by}&apos;s correction on {day(a.learnedFrom.on)}.{" "}
+              Learned from {/^you\b/i.test(a.learnedFrom.by) ? "your" : `${a.learnedFrom.by}'s`} correction on {day(a.learnedFrom.on)}.{" "}
               {a.learnedFrom.blobId && !a.learnedFrom.blobId.startsWith("local-") && (
                 <a href={`https://walruscan.com/mainnet/blob/${a.learnedFrom.blobId}`} target="_blank" rel="noreferrer">
                   Stored on Walrus
