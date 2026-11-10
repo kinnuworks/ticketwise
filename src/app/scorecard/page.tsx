@@ -17,60 +17,99 @@ const pct = (a: number, b: number) => (b ? `${Math.round((100 * a) / b)}%` : "â€
 
 export default function Scorecard() {
   const s = sc as unknown as Score;
-  if (s.pending) {
-    return (
-      <>
-        <h1>Replay scorecard</h1>
-        <p className="lede">The replay has not been run yet.</p>
-      </>
-    );
-  }
-  const rows = Object.entries(s.perKey).sort((a, b) => b[1].n - a[1].n);
   return (
     <>
-      <h1>Replay scorecard</h1>
-      <p className="lede">
-        Real failed mainnet transactions from {s.packages.join(", ")}, read through Tatum over {s.days} days. The earlier{" "}
-        {s.split.train} failures taught Ticketwise one correction per distinct error (meaning taken from the contract&apos;s own
-        source). The later {s.split.test} failures were then triaged with memory off and on.
-      </p>
-      <div className="row" style={{ gap: 16 }}>
-        <div className="card" style={{ flex: 1, minWidth: 220 }}>
-          <div className="muted small">Memory off</div>
-          <div style={{ fontSize: 32, fontWeight: 700 }}>{pct(s.withoutMemory.answered, s.withoutMemory.of)}</div>
-          <div className="small">of later tickets answered with what the team taught ({s.withoutMemory.answered} of {s.withoutMemory.of})</div>
+      <section className="hero hero--color hero--app hero--sub">
+        <div className="container">
+          <span className="badge badge--dot">Replay on Sui mainnet data</span>
+          <h1>
+            Same errors, <span className="t-muted">right answers.</span>
+          </h1>
+          {s.pending ? (
+            <p className="lead">The replay hasn&apos;t been run yet.</p>
+          ) : (
+            <p className="lead">
+              {s.split.train + s.split.test} real failed transactions from {s.packages.join(", ")}, read through Tatum over {s.days}{" "}
+              days. The first {s.split.train} taught Ticketwise. The last {s.split.test} were answered with memory off and on.
+            </p>
+          )}
         </div>
-        <div className="card" style={{ flex: 1, minWidth: 220 }}>
-          <div className="muted small">Memory on (Walrus Memory)</div>
-          <div style={{ fontSize: 32, fontWeight: 700 }}>{pct(s.withMemory.answered, s.withMemory.of)}</div>
-          <div className="small">
-            answered from a teammate&apos;s correction ({s.withMemory.answered} of {s.withMemory.of}); {s.withMemory.correctMeaning} with the
-            right meaning
-          </div>
-        </div>
-      </div>
-      <h2>Per error</h2>
-      <p className="small muted">
-        {s.distinct.all} distinct errors in the replay. {s.distinct.taught} were seen and taught in the earlier part. Errors that only
-        appear later stay unanswered until someone teaches them, and the table shows that honestly.
-      </p>
-      <table>
-        <thead>
-          <tr><th>Error</th><th>Source name</th><th>Later tickets</th><th>Answered from memory</th><th>Taught earlier?</th></tr>
-        </thead>
-        <tbody>
-          {rows.map(([k, v]) => (
-            <tr key={k}>
-              <td className="mono">{k}</td>
-              <td className="mono">{v.constant ?? "unknown"}</td>
-              <td>{v.n}</td>
-              <td>{v.answered}</td>
-              <td>{v.taughtEarlier ? "yes" : "no"}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <p className="small muted">Run {s.ranAt} against {s.store === "walrus" ? "Walrus Memory on Sui mainnet" : "a local test store"}. Script: scripts/run-scorecard.mts.</p>
+      </section>
+
+      {!s.pending && (
+        <>
+          <section className="section">
+            <div className="container">
+              <div className="compare">
+                <div className="card">
+                  <div className="t-micro">Memory off</div>
+                  <div className="bignum bignum--muted">{pct(s.withoutMemory.answered, s.withoutMemory.of)}</div>
+                  <p className="t-small">
+                    {s.withoutMemory.answered} of {s.withoutMemory.of} later tickets answered with what the team taught. Without
+                    memory it can only explain the abort code.
+                  </p>
+                </div>
+                <div className="card card--chosen">
+                  <div className="t-micro">Memory on, from Walrus Memory</div>
+                  <div className="bignum">{pct(s.withMemory.answered, s.withMemory.of)}</div>
+                  <p className="t-small">
+                    {s.withMemory.answered} of {s.withMemory.of} answered from a teammate&apos;s correction, {s.withMemory.correctMeaning}{" "}
+                    with the right meaning.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="section section--alt">
+            <div className="container">
+              <div className="section-head section-head--left">
+                <span className="eyebrow">
+                  <span className="dot" /> Per error
+                </span>
+                <h3>How the replay was run.</h3>
+                <p className="prose-small" style={{ marginTop: 14 }}>
+                  The failures are split by time, so nothing from the later part leaks into teaching. For each distinct error in the
+                  earlier part, one correction was saved to Walrus Memory, with its meaning taken from the contract&apos;s own source.
+                  The replay found {s.distinct.all} distinct errors, and {s.distinct.taught} were taught. All {s.distinct.test} errors in
+                  the later part had already appeared earlier, so every later ticket had a correction to draw on. An error that only
+                  shows up later would stay unanswered until someone teaches it.
+                </p>
+              </div>
+              <div className="table-wrap">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>Error</th>
+                      <th>Name in contract source</th>
+                      <th className="num">Later tickets</th>
+                      <th className="num">Answered from memory</th>
+                      <th>Taught earlier</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Object.entries(s.perKey)
+                      .sort((a, b) => b[1].n - a[1].n)
+                      .map(([k, v]) => (
+                        <tr key={k}>
+                          <td className="t-mono">{k}</td>
+                          <td className="t-mono">{v.constant ?? "unknown"}</td>
+                          <td className="num">{v.n}</td>
+                          <td className="num">{v.answered}</td>
+                          <td>{v.taughtEarlier ? <span className="check">Yes</span> : <span className="cross">No</span>}</td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="t-micro" style={{ marginTop: 14 }}>
+                Run {s.ranAt.slice(0, 16).replace("T", " ")} UTC against{" "}
+                {s.store === "walrus" ? "Walrus Memory on Sui mainnet" : "a local test store"}. Script: scripts/run-scorecard.mts.
+              </p>
+            </div>
+          </section>
+        </>
+      )}
     </>
   );
 }

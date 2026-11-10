@@ -1,0 +1,13 @@
+{
+  "ranOn": "2026-11-10",
+  "namespace": "ticketwise-durability",
+  "where": "live deployment, Walrus Memory on Sui mainnet",
+  "steps": [
+    { "step": "Save a correction", "ok": true, "ms": 25460, "detail": "stored blob 50IpAuE7iMcUtBTAcSgieujTnaKmwPnCOUVtPdPOLFA" },
+    { "step": "Recall it", "ok": true, "ms": 1609, "detail": "found the correction" },
+    { "step": "Delete the search index", "ok": true, "ms": 281, "detail": "relayer index for this namespace deleted; Walrus blobs untouched" },
+    { "step": "Recall again", "ok": true, "ms": 261, "detail": "nothing found" },
+    { "step": "Restore from Walrus", "ok": true, "ms": 4522, "detail": "restored 1, skipped 0, total 1" },
+    { "step": "Recall after restore", "ok": true, "ms": 2062, "detail": "found the correction again" }
+  ]
+}

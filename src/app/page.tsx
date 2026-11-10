@@ -1,31 +1,214 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import type { Triage, Answer } from "@/lib/triage";
 import type { Diagnosis } from "@/lib/diagnose";
+import sc from "@/data/scorecard.json";
+import { Alert, Arrow, Bell, Chain, CheckCircle, Inbox as InboxIcon, Layers, Pen, Repeat, Shuffle } from "./icons";
 
 type QueueItem = { id: string; at: string; message: string; key: string | null; queue: string; learned: boolean };
+type Score = {
+  pending?: boolean;
+  days: number;
+  packages: string[];
+  split: { train: number; test: number };
+  withoutMemory: { answered: number; of: number };
+  withMemory: { answered: number; of: number };
+};
 
 const QUEUES = ["Triage", "Trading", "Wallet & gas", "Bugs", "Billing"];
+const score = sc as unknown as Score;
 
 function day(iso: string) {
   const d = new Date(`${iso}T12:00:00Z`);
   return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
 }
+const suiscan = (digest: string) => `https://suiscan.xyz/mainnet/tx/${digest}`;
+const short = (s: string) => (s.length > 16 ? `${s.slice(0, 8)}…${s.slice(-6)}` : s);
+const pct = (a: number, b: number) => (b ? `${Math.round((100 * a) / b)}%` : "–");
 
-function suiscan(digest: string) {
-  return `https://suiscan.xyz/mainnet/tx/${digest}`;
+export default function Home() {
+  return (
+    <>
+      <section className="hero hero--color hero--app">
+        <div className="container">
+          <span className="badge badge--dot">Live on Sui mainnet</span>
+          <h1>
+            Support that learns <span className="t-muted">your errors.</span>
+          </h1>
+          <p className="lead">
+            Paste a user&apos;s message with a failed Sui transaction. Ticketwise reads it from the chain through Tatum, explains
+            it in plain words, and answers with what your team taught it.
+          </p>
+          <div className="trust">
+            <span>No sign-up</span>
+            <span>Reads mainnet through Tatum</span>
+            <span>Remembers in Walrus Memory</span>
+          </div>
+          <div className="hero__visual bleed" id="inbox">
+            <div className="window">
+              <div className="window__bar">
+                <div className="lights" aria-hidden="true">
+                  <i />
+                  <i />
+                  <i />
+                </div>
+                <span className="window__title">Support inbox</span>
+              </div>
+              <InboxApp />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section section--alt after-bleed" id="how">
+        <div className="container">
+          <div className="section-head">
+            <span className="eyebrow">
+              <span className="dot" /> How it learns
+            </span>
+            <h2>
+              Correct it once. <span className="t-muted">It remembers.</span>
+            </h2>
+            <p className="lead">
+              Most tickets for a Sui app are the same few contract errors, over and over. Teach Ticketwise what one means, and every
+              later ticket with that error gets the right answer, with your name on it.
+            </p>
+          </div>
+          <div className="grid grid-3">
+            <div className="tile reveal" style={{ ["--i" as string]: 0 }}>
+              <span className="icon-tile"><Chain /></span>
+              <div>
+                <div className="step-num">01</div>
+                <p className="t-title">It reads the failure</p>
+                <p>
+                  Paste a digest or wallet address. Tatum&apos;s Sui gateway returns the abort code, module and function, and
+                  Ticketwise names the error from the contract&apos;s source.
+                </p>
+              </div>
+            </div>
+            <div className="tile reveal" style={{ ["--i" as string]: 1 }}>
+              <span className="icon-tile"><Pen /></span>
+              <div>
+                <div className="step-num">02</div>
+                <p className="t-title">You correct it once</p>
+                <p>
+                  Say what the error means for users, what to reply and which queue owns it. The correction goes to Walrus Memory
+                  with your name and the date.
+                </p>
+              </div>
+            </div>
+            <div className="tile reveal" style={{ ["--i" as string]: 2 }}>
+              <span className="icon-tile"><Repeat /></span>
+              <div>
+                <div className="step-num">03</div>
+                <p className="t-title">It answers the next one</p>
+                <p>
+                  The next ticket with that error is answered from your correction. Switch memory off to see the answer without
+                  it.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {!score.pending && (
+        <section className="section">
+          <div className="container split">
+            <div>
+              <span className="eyebrow">
+                <span className="dot" /> Replay on real failures
+              </span>
+              <h3>
+                {score.withMemory.answered} of {score.withMemory.of} later tickets answered from memory.
+              </h3>
+              <p className="t-small">
+                We pulled {score.split.train + score.split.test} real failed transactions from {score.packages.join(", ")} over{" "}
+                {score.days} days. Corrections were taught from the first {score.split.train}. The last {score.split.test} were
+                then triaged with memory off and on.
+              </p>
+              <p className="t-small">
+                Every error in the later set had already shown up earlier. That&apos;s what support queues look like: the same
+                errors keep coming back.
+              </p>
+              <div className="cta-row" style={{ justifyContent: "flex-start" }}>
+                <Link href="/scorecard" className="btn btn-outline">
+                  See the scorecard <Arrow />
+                </Link>
+              </div>
+            </div>
+            <div className="stage stage--soft reveal">
+              <div className="compare">
+                <div className="card">
+                  <div className="t-micro">Memory off</div>
+                  <div className="bignum bignum--muted">{pct(score.withoutMemory.answered, score.withoutMemory.of)}</div>
+                  <div className="t-small">
+                    {score.withoutMemory.answered} of {score.withoutMemory.of} answered with what the team taught
+                  </div>
+                </div>
+                <div className="card card--chosen">
+                  <div className="t-micro">Memory on</div>
+                  <div className="bignum">{pct(score.withMemory.answered, score.withMemory.of)}</div>
+                  <div className="t-small">
+                    {score.withMemory.answered} of {score.withMemory.of} answered from a teammate&apos;s correction
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      <section className="section section--alt why">
+        <div className="container">
+          <div className="section-head">
+            <span className="eyebrow">
+              <span className="dot" /> Under the hood
+            </span>
+            <h2>Why it needs Tatum and Walrus.</h2>
+          </div>
+          <div className="grid grid-2">
+            <div className="card reveal" style={{ ["--i" as string]: 0 }}>
+              <span className="icon-tile"><Chain /></span>
+              <h3>Tatum reads the chain.</h3>
+              <p className="t-small">
+                Every answer starts from mainnet data: the transaction&apos;s status, abort code, module and function, read through
+                Tatum&apos;s Sui gateway. Nothing is guessed from the user&apos;s description.
+              </p>
+            </div>
+            <div className="card reveal" style={{ ["--i" as string]: 1 }}>
+              <span className="icon-tile"><Layers /></span>
+              <h3>Walrus keeps what it learned.</h3>
+              <p className="t-small">
+                Corrections and escalation rules live in Walrus Memory on Sui mainnet, not on this server. Wipe the search index
+                and it rebuilds from Walrus. The Proof page lists the stored memories and the last check.
+              </p>
+              <div>
+                <Link href="/proof" className="btn btn-sm btn-outline">
+                  See the proof <Arrow />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
 }
 
-export default function Inbox() {
+function InboxApp() {
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<Triage | null>(null);
   const [memoryOn, setMemoryOn] = useState(true);
   const [recent, setRecent] = useState<Diagnosis[]>([]);
+  const [loadingRecent, setLoadingRecent] = useState(true);
   const [queue, setQueue] = useState<QueueItem[]>([]);
   const [elapsed, setElapsed] = useState<number | null>(null);
+  const autoRan = useRef(false);
 
   useEffect(() => {
     try {
@@ -34,13 +217,26 @@ export default function Inbox() {
     fetch("/api/recent-failures")
       .then((r) => r.json())
       .then((d) => setRecent(d.items ?? []))
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoadingRecent(false));
   }, []);
+
+  // First visit: answer a real failed transaction right away, so the first screen shows the product working.
+  useEffect(() => {
+    if (autoRan.current || !recent.length) return;
+    autoRan.current = true;
+    let seen = false;
+    try {
+      seen = localStorage.getItem("tw_seen") === "1";
+      localStorage.setItem("tw_seen", "1");
+    } catch {}
+    if (!seen) tryReal();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [recent]);
 
   async function submit(text: string) {
     setBusy(true);
     setError(null);
-    setResult(null);
     setMemoryOn(true);
     const t = Date.now();
     try {
@@ -80,68 +276,75 @@ export default function Inbox() {
   }
 
   return (
-    <>
-      <h1>Support inbox</h1>
-      <p className="lede">
-        Paste a user&apos;s support message with a failed Sui transaction or wallet address. Ticketwise reads the chain through Tatum,
-        explains the failure, and answers with what your team taught it. Every correction is stored in Walrus Memory.
-      </p>
-      <div className="grid">
-        <div>
-          <div className="card">
-            <label htmlFor="msg">Support message</label>
-            <textarea
-              id="msg"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="e.g. My order cancel keeps failing: 6xYz… (transaction digest) or 0x… (wallet address)"
-            />
-            <div className="row" style={{ marginTop: 10 }}>
-              <button disabled={busy || message.trim().length < 3} onClick={() => submit(message)}>
-                {busy ? "Reading the chain…" : "Triage ticket"}
-              </button>
-              <button className="ghost" disabled={busy || !recent.length} onClick={tryReal}>
-                Use a real failed transaction
-              </button>
-              <span className="muted small">{recent.length ? `${recent.length} recent mainnet failures loaded` : "loading recent failures…"}</span>
-            </div>
-            {error && <p className="error">{error}</p>}
+    <div className="app">
+      <div className="app__main">
+        <div className="composer">
+          <label className="field-label" htmlFor="msg">
+            Support message
+          </label>
+          <textarea
+            id="msg"
+            className="textarea"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Paste what the user wrote, with a transaction digest or a 0x… wallet address."
+          />
+          <div className="composer__actions">
+            <button className="btn btn-primary" disabled={busy || message.trim().length < 3} onClick={() => submit(message)}>
+              {busy ? "Reading the chain…" : "Triage ticket"}
+            </button>
+            <button className="btn btn-outline" disabled={busy || !recent.length} onClick={tryReal}>
+              <Shuffle /> Use a real failed transaction
+            </button>
+            <span className="t-micro composer__hint">
+              {loadingRecent
+                ? "Loading recent mainnet failures…"
+                : recent.length
+                  ? `${recent.length} recent mainnet ${recent.length === 1 ? "failure" : "failures"} ready`
+                  : "No recent failures loaded. Paste a digest instead."}
+            </span>
           </div>
-          {result && (
-            <TicketResult
-              t={result}
-              memoryOn={memoryOn}
-              setMemoryOn={setMemoryOn}
-              elapsed={elapsed}
-              onSaved={() => submit(result.message)}
-            />
-          )}
+          {error && <p className="error">{error}</p>}
         </div>
-        <aside>
-          <div className="card soft">
-            <h3 style={{ marginTop: 0 }}>Queue</h3>
-            {!queue.length && <p className="muted small">Tickets you triage show up here.</p>}
-            <ul className="queue" style={{ paddingLeft: 16, margin: 0 }}>
+
+        {result ? (
+          <TicketResult t={result} memoryOn={memoryOn} setMemoryOn={setMemoryOn} elapsed={elapsed} onSaved={() => submit(result.message)} />
+        ) : (
+          <div className="idle">
+            <p className="t-title">{busy ? "Reading a real failed transaction from Sui mainnet…" : "Try it in 30 seconds"}</p>
+            <ol>
+              <li>Click &quot;Use a real failed transaction&quot;. It pulls a fresh failure from mainnet.</li>
+              <li>If nobody has taught Ticketwise that error yet, it says so. Correct it and save.</li>
+              <li>Triage it again. The answer now comes from your correction.</li>
+            </ol>
+          </div>
+        )}
+      </div>
+
+      <aside className="app__side">
+        <div className="side-card">
+          <p className="t-title">
+            <InboxIcon size={16} /> Queue <span className="count">{queue.length}</span>
+          </p>
+          {!queue.length ? (
+            <p className="t-micro">Tickets you triage show up here.</p>
+          ) : (
+            <ul className="queue">
               {queue.slice(0, 12).map((q) => (
-                <li key={q.id} className="small">
-                  <span className="tag">{q.queue}</span> {q.learned && <span className="tag learned">taught</span>}
-                  <div className="muted" style={{ overflowWrap: "anywhere" }}>{q.message}</div>
+                <li key={q.id}>
+                  <div className="row">
+                    <span className="pill mini">{q.queue}</span>
+                    {q.learned && <span className="pill pill--learned mini">taught</span>}
+                  </div>
+                  <span className="msg">{q.message}</span>
                 </li>
               ))}
             </ul>
-          </div>
-          <RuleCard />
-          <div className="card soft small">
-            <h3 style={{ marginTop: 0 }}>How it learns</h3>
-            <ol style={{ paddingLeft: 18, margin: 0 }}>
-              <li>Triage a failed transaction. If nobody taught it this error yet, it says so.</li>
-              <li>Correct it: what the error means, the reply, the queue.</li>
-              <li>Triage the same kind of failure again. The answer now comes from your correction, with your name and the date.</li>
-            </ol>
-          </div>
-        </aside>
-      </div>
-    </>
+          )}
+        </div>
+        <RuleCard />
+      </aside>
+    </div>
   );
 }
 
@@ -160,76 +363,128 @@ function TicketResult({
 }) {
   const d = t.primary;
   const a: Answer = memoryOn ? t.withMemory : t.withoutMemory;
+  const sandbox = a.learnedFrom?.namespace.includes("-sb-");
   return (
-    <div className="card">
-      <div className="row" style={{ justifyContent: "space-between" }}>
-        <h2 style={{ margin: 0 }}>Ticket</h2>
-        <div className="toggle" role="group" aria-label="Memory">
-          <button className={memoryOn ? "on" : ""} onClick={() => setMemoryOn(true)}>Memory on</button>
-          <button className={!memoryOn ? "on" : ""} onClick={() => setMemoryOn(false)}>Memory off</button>
+    <div className="ticket" key={`${d?.digest}-${t.withMemory.learnedFrom?.blobId ?? "none"}`}>
+      <div className="ticket__head">
+        <p className="t-title">Ticket</p>
+        <div className="segmented" role="group" aria-label="Memory">
+          <button aria-pressed={memoryOn} onClick={() => setMemoryOn(true)}>
+            Memory on
+          </button>
+          <button aria-pressed={!memoryOn} onClick={() => setMemoryOn(false)}>
+            Memory off
+          </button>
         </div>
       </div>
-      {t.memoryMode === "local-dev" && <p className="unknown-note">Developer mode: memory is held in this server process, not Walrus.</p>}
+      {t.memoryMode === "local-dev" && <div className="note note--dev">Developer mode: memory is held on this server, not in Walrus.</div>}
 
-      <h3>What happened on chain</h3>
-      {d ? (
-        <>
-          <p style={{ margin: "4px 0" }}>{d.summary}</p>
-          <p className="small muted" style={{ margin: 0 }}>
-            <a href={suiscan(d.digest)} target="_blank" rel="noreferrer" className="mono">{d.digest}</a>
-            {d.key && <> · failure <span className="mono">{d.key}</span></>}
-            {d.sourceEntry?.source && (
-              <> · <a href={d.sourceEntry.source} target="_blank" rel="noreferrer">source</a></>
-            )}
-          </p>
-        </>
-      ) : (
-        <p className="muted">No transaction in this message. {t.notes.join(" ")}</p>
-      )}
-
-      <h3>Answer</h3>
-      <div className="row">
-        <span className="tag">Queue: {a.queue}</span>
-        <span className={`tag ${a.escalate === "on-call" ? "oncall" : ""}`}>{a.escalate === "on-call" ? "Page on-call" : "Normal priority"}</span>
-        {a.learnedFrom && <span className="tag learned">{a.learnedFrom.namespace.includes("-sb-") ? "taught by you (sandbox)" : "taught by your team"}</span>}
+      <div className="ticket__section">
+        <div className="ticket__label">
+          <Chain size={14} /> What happened on chain <span className="src">via Tatum</span>
+        </div>
+        {d ? (
+          <>
+            <p>{d.summary}</p>
+            <div className="meta">
+              <a className="mono-chip" href={suiscan(d.digest)} target="_blank" rel="noreferrer" title={d.digest}>
+                tx {short(d.digest)}
+              </a>
+              {d.key && <span className="mono-chip">{d.key}</span>}
+              {d.sourceEntry?.constant && <span className="mono-chip">{d.sourceEntry.constant}</span>}
+              {d.sourceEntry?.source && (
+                <a className="mono-chip" href={d.sourceEntry.source} target="_blank" rel="noreferrer">
+                  contract source
+                </a>
+              )}
+            </div>
+          </>
+        ) : (
+          <p className="t-small">No transaction in this message. {t.notes.join(" ")}</p>
+        )}
       </div>
-      {a.learnedFrom ? (
-        <div className="learned-note">
-          Learned from {a.learnedFrom.by}&apos;s correction on {day(a.learnedFrom.on)}.{" "}
-          {a.learnedFrom.blobId && !a.learnedFrom.blobId.startsWith("local-") && (
-            <a href={`https://walruscan.com/mainnet/blob/${a.learnedFrom.blobId}`} target="_blank" rel="noreferrer">Stored on Walrus</a>
+
+      <div className="ticket__section">
+        <div className="ticket__label">
+          <Layers size={14} /> Answer <span className="src">{memoryOn ? "with Walrus Memory" : "memory off"}</span>
+        </div>
+        <div className="meta" style={{ marginTop: 0 }}>
+          <span className="pill">Queue: {a.queue}</span>
+          {a.escalate === "on-call" ? (
+            <span className="pill pill--warn">
+              <Bell /> Page on-call
+            </span>
+          ) : (
+            <span className="pill">Normal priority</span>
+          )}
+          {a.learnedFrom && (
+            <span className="pill pill--learned">
+              <CheckCircle /> {sandbox ? "Taught by you (sandbox)" : "Taught by your team"}
+            </span>
           )}
         </div>
-      ) : (
-        d?.key && (
-          <div className="unknown-note">
-            {memoryOn ? "Nobody has taught me what this error means for your users yet." : "Memory is off: this is the answer without anything your team taught."}
+        {a.learnedFrom ? (
+          <div className="note note--learned">
+            <CheckCircle />
+            <span>
+              Learned from {a.learnedFrom.by}&apos;s correction on {day(a.learnedFrom.on)}.{" "}
+              {a.learnedFrom.blobId && !a.learnedFrom.blobId.startsWith("local-") && (
+                <a href={`https://walruscan.com/mainnet/blob/${a.learnedFrom.blobId}`} target="_blank" rel="noreferrer">
+                  Stored on Walrus
+                </a>
+              )}
+            </span>
           </div>
-        )
-      )}
-      {a.escalatedBy && (
-        <div className="learned-note">
-          Paged on-call: this wallet failed {a.escalatedBy.failures} times today. Rule from {a.escalatedBy.by} on {day(a.escalatedBy.on)}: “{a.escalatedBy.text}”
-        </div>
-      )}
-      {a.meaning && <p><strong>What it means:</strong> {a.meaning}</p>}
-      <label>Draft reply</label>
-      <div className="card soft" style={{ marginBottom: 8 }}>{a.reply}</div>
-      <p className="small muted">
-        {elapsed !== null && <>Answered in {(elapsed / 1000).toFixed(1)} s · </>}chain read {t.timings.tatumMs} ms · memory {t.timings.memoryMs} ms
-      </p>
+        ) : (
+          d?.key && (
+            <div className="note note--warn">
+              <Alert />
+              <span>
+                {memoryOn
+                  ? "Nobody has taught me what this error means for your users yet."
+                  : "Memory is off. This is the answer without anything your team taught."}
+              </span>
+            </div>
+          )
+        )}
+        {a.escalatedBy && (
+          <div className="note note--warn">
+            <Bell />
+            <span>
+              Paged on-call: this wallet failed {a.escalatedBy.failures} times today. Rule from {a.escalatedBy.by} on{" "}
+              {day(a.escalatedBy.on)}.
+            </span>
+          </div>
+        )}
+        {a.meaning && (
+          <p style={{ marginTop: 12 }}>
+            <strong>What it means:</strong> {a.meaning}
+          </p>
+        )}
+      </div>
+
+      <div className="ticket__section">
+        <div className="ticket__label">Draft reply</div>
+        <div className="reply">{a.reply}</div>
+        <p className="timing">
+          {elapsed !== null && <>answered in {(elapsed / 1000).toFixed(1)} s · </>}chain {t.timings.tatumMs} ms · memory {t.timings.memoryMs} ms
+        </p>
+      </div>
 
       {memoryOn && t.similar.length > 0 && !a.learnedFrom && (
-        <>
-          <h3>Similar past cases</h3>
-          <ul className="small">
+        <div className="ticket__section">
+          <div className="ticket__label">Similar past cases</div>
+          <ul className="similar">
             {t.similar.map((s) => (
               <li key={s.key}>
-                <span className="mono">{s.key}</span>: {s.meaning} <span className="muted">({s.queue}, taught by {s.by} on {s.on}, distance {s.distance})</span>
+                <span className="t-mono">{s.key}</span>: {s.meaning}{" "}
+                <span className="t-micro">
+                  ({s.queue}, taught by {s.by} on {s.on})
+                </span>
               </li>
             ))}
           </ul>
-        </>
+        </div>
       )}
 
       {d?.key && memoryOn && <CorrectForm d={d} current={t.withMemory} onSaved={onSaved} />}
@@ -270,9 +525,7 @@ function CorrectForm({ d, current, onSaved }: { d: Diagnosis; current: Answer; o
       if (!r.ok) throw new Error(j.error || "Save failed");
       setState("saved");
       setMsg(
-        `${j.mode === "walrus" ? "Saved to Walrus Memory on Sui mainnet" : "Saved in developer mode (not Walrus)"}${j.team ? " for the whole team" : " in your demo sandbox"} in ${(j.ms / 1000).toFixed(1)} s${
-          j.blobId && !String(j.blobId).startsWith("local-") ? ` (blob ${String(j.blobId).slice(0, 10)}…)` : ""
-        }.`,
+        `${j.mode === "walrus" ? "Saved to Walrus Memory on Sui mainnet" : "Saved in developer mode (not Walrus)"}${j.team ? " for the whole team" : " in your demo sandbox"} in ${(j.ms / 1000).toFixed(1)} s.`,
       );
     } catch (e) {
       setState("error");
@@ -282,69 +535,77 @@ function CorrectForm({ d, current, onSaved }: { d: Diagnosis; current: Answer; o
 
   if (!open)
     return (
-      <button className="ghost" onClick={() => setOpen(true)}>
-        Correct this answer
-      </button>
+      <div className="ticket__section">
+        <button className="btn btn-sm btn-outline" onClick={() => setOpen(true)}>
+          <Pen size={15} /> Correct this answer
+        </button>
+      </div>
     );
   return (
-    <div className="card soft">
-      <h3 style={{ marginTop: 0 }}>Teach Ticketwise</h3>
+    <div className="teach">
+      <p className="t-title">Teach Ticketwise</p>
       {d.sourceEntry?.constant && (
-        <p className="small muted" style={{ marginTop: 0 }}>
-          The contract source calls this error <span className="mono">{d.sourceEntry.constant}</span>
-          {d.sourceEntry.meaning ? `: ${d.sourceEntry.meaning}` : ""}
+        <p className="t-small">
+          The contract source calls this error <span className="t-mono">{d.sourceEntry.constant}</span>
+          {d.sourceEntry.meaning ? `: ${d.sourceEntry.meaning}` : "."}
         </p>
       )}
-      <label>What this error means for the user</label>
-      <input value={meaning} onChange={(e) => setMeaning(e.target.value)} placeholder="e.g. The order was already filled or cancelled before your cancel arrived." />
-      <label>What to tell them</label>
-      <textarea value={reply} onChange={(e) => setReply(e.target.value)} placeholder="e.g. Refresh your open orders. Nothing was lost except a small gas fee." />
-      <div className="row">
-        <div style={{ flex: 1, minWidth: 140 }}>
-          <label>Queue</label>
-          <select value={queue} onChange={(e) => setQueue(e.target.value)}>
+      <label className="field-label" htmlFor="t-meaning" style={{ marginTop: 14 }}>
+        What this error means for the user
+      </label>
+      <input id="t-meaning" className="input" value={meaning} onChange={(e) => setMeaning(e.target.value)} placeholder="The order was already filled or canceled before the cancel arrived." />
+      <label className="field-label" htmlFor="t-reply">
+        What to tell them
+      </label>
+      <textarea id="t-reply" className="textarea" value={reply} onChange={(e) => setReply(e.target.value)} placeholder="Refresh your open orders. Only the gas fee was charged." />
+      <div className="fields">
+        <div>
+          <label className="field-label" htmlFor="t-queue">Queue</label>
+          <select id="t-queue" className="select" value={queue} onChange={(e) => setQueue(e.target.value)}>
             {QUEUES.map((q) => (
               <option key={q}>{q}</option>
             ))}
           </select>
         </div>
-        <div style={{ flex: 1, minWidth: 140 }}>
-          <label>Priority</label>
-          <select value={escalate} onChange={(e) => setEscalate(e.target.value as "normal" | "on-call")}>
+        <div>
+          <label className="field-label" htmlFor="t-prio">Priority</label>
+          <select id="t-prio" className="select" value={escalate} onChange={(e) => setEscalate(e.target.value as "normal" | "on-call")}>
             <option value="normal">Normal</option>
             <option value="on-call">Page on-call</option>
           </select>
         </div>
-        <div style={{ flex: 1, minWidth: 140 }}>
-          <label>Your name</label>
-          <input value={by} onChange={(e) => setBy(e.target.value)} placeholder="optional" />
+        <div>
+          <label className="field-label" htmlFor="t-by">Your name</label>
+          <input id="t-by" className="input" value={by} onChange={(e) => setBy(e.target.value)} placeholder="Optional" />
         </div>
       </div>
-      <label>Team passcode (leave empty to try it in your own sandbox)</label>
-      <input type="password" value={passcode} onChange={(e) => setPasscode(e.target.value)} />
-      <div className="row" style={{ marginTop: 10 }}>
-        <button disabled={state === "saving" || meaning.trim().length < 5} onClick={save}>
+      <label className="field-label" htmlFor="t-pass">
+        Team passcode <span className="t-micro">(leave empty to save to your own sandbox)</span>
+      </label>
+      <input id="t-pass" className="input" type="password" value={passcode} onChange={(e) => setPasscode(e.target.value)} />
+      <div className="composer__actions" style={{ marginTop: 14 }}>
+        <button className="btn btn-primary" disabled={state === "saving" || meaning.trim().length < 5} onClick={save}>
           {state === "saving" ? "Saving to Walrus…" : "Save correction"}
         </button>
         {state === "saved" && (
-          <button className="ghost" onClick={onSaved}>
-            Triage this ticket again
+          <button className="btn btn-outline" onClick={onSaved}>
+            <Repeat size={16} /> Triage this ticket again
           </button>
         )}
       </div>
       {state === "saving" && (
-        <p className="small">
-          Writing to Walrus on Sui mainnet. This usually takes about 20 seconds, because the memory is encrypted, stored
-          and registered on chain before it can be recalled.
-        </p>
+        <div className="saving">
+          <span className="spinner" aria-hidden="true" />
+          Writing to Walrus on Sui mainnet. This takes about 20 seconds: the memory is encrypted, stored and registered on chain.
+        </div>
       )}
-      {msg && <p className={state === "error" ? "error" : "small"}>{msg}</p>}
+      {msg && (state === "error" ? <p className="error">{msg}</p> : <div className="note note--learned"><CheckCircle /><span>{msg}</span></div>)}
     </div>
   );
 }
 
 function RuleCard() {
-  const [count, setCount] = useState(2);
+  const [count, setCount] = useState(3);
   const [passcode, setPasscode] = useState("");
   const [msg, setMsg] = useState("");
   const [busy, setBusy] = useState(false);
@@ -363,20 +624,26 @@ function RuleCard() {
     }
   }
   return (
-    <div className="card soft small">
-      <h3 style={{ marginTop: 0 }}>Escalation rule</h3>
-      <p style={{ margin: 0 }}>
+    <div className="side-card">
+      <p className="t-title">
+        <Bell size={16} /> Escalation rule
+      </p>
+      <p className="rule-text">
         If the same wallet fails{" "}
-        <select value={count} onChange={(e) => setCount(Number(e.target.value))} style={{ width: "auto", padding: "2px 4px" }}>
+        <select className="select select--inline" value={count} onChange={(e) => setCount(Number(e.target.value))} aria-label="Failures per day">
           {[2, 3, 4, 5].map((n) => (
-            <option key={n} value={n}>{n}</option>
+            <option key={n} value={n}>
+              {n}
+            </option>
           ))}
         </select>{" "}
         or more times in a day, page on-call.
       </p>
-      <input type="password" placeholder="Team passcode (optional)" value={passcode} onChange={(e) => setPasscode(e.target.value)} style={{ marginTop: 8 }} />
-      <button className="ghost" style={{ marginTop: 8 }} disabled={busy} onClick={save}>{busy ? "Saving to Walrus (about 20 s)…" : "Teach this rule"}</button>
-      {msg && <p style={{ marginBottom: 0 }}>{msg}</p>}
+      <input className="input" type="password" placeholder="Team passcode (optional)" value={passcode} onChange={(e) => setPasscode(e.target.value)} style={{ marginTop: 10 }} aria-label="Team passcode" />
+      <button className="btn btn-sm btn-outline" style={{ marginTop: 10, width: "100%" }} disabled={busy} onClick={save}>
+        {busy ? "Saving to Walrus (about 20 s)…" : "Teach this rule"}
+      </button>
+      {msg && <p className="t-micro" style={{ marginTop: 8 }}>{msg}</p>}
     </div>
   );
 }

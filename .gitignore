@@ -53,3 +53,4 @@ scratch/
 !.env.example
 
 .claude/
+output/
