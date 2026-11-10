@@ -37,6 +37,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             <span style={{ display: "flex", gap: 16 }}>
               <Link href="/scorecard">Scorecard</Link>
               <Link href="/proof">Proof</Link>
+              <a href="https://github.com/kinnuworks/ticketwise" target="_blank" rel="noreferrer">
+                Source
+              </a>
             </span>
           </div>
         </footer>
