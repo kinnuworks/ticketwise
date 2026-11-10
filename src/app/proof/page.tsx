@@ -4,6 +4,8 @@ import last from "@/data/durability.json";
 import { Layers } from "../icons";
 
 type Proof = {
+  namespaces?: { namespace: string; what: string; count: number }[];
+  total?: number;
   mode: string;
   namespace: string;
   account: string | null;
@@ -87,7 +89,7 @@ export default function ProofPage() {
             ) : (
               <>
                 <h3>
-                  {p.count} {p.count === 1 ? "memory" : "memories"} in <span className="t-mono">{p.namespace}</span>.
+                  {p.total ?? p.count} memories on Walrus mainnet.
                 </h3>
                 <p className="prose-small" style={{ marginTop: 12 }}>
                   {p.mode !== "walrus" ? (
@@ -99,7 +101,7 @@ export default function ProofPage() {
                         <a className="t-mono t-accent" href={`https://suiscan.xyz/mainnet/object/${p.account}`} target="_blank" rel="noreferrer">
                           {p.account.slice(0, 10)}…{p.account.slice(-6)}
                         </a>{" "}
-                        on Sui mainnet.
+                        on Sui mainnet. The table lists the team namespace, which the inbox reads.
                       </>
                     )
                   )}
@@ -107,6 +109,17 @@ export default function ProofPage() {
               </>
             )}
           </div>
+          {p && !p.error && p.namespaces && (
+            <div className="grid grid-3" style={{ marginBottom: 24 }}>
+              {p.namespaces.map((n) => (
+                <div className="card" key={n.namespace}>
+                  <div className="bignum" style={{ fontSize: 48 }}>{n.count}</div>
+                  <div className="t-mono t-small" style={{ marginTop: 6 }}>{n.namespace}</div>
+                  <p className="t-small" style={{ marginTop: 6 }}>{n.what}</p>
+                </div>
+              ))}
+            </div>
+          )}
           {p && !p.error && p.memories.length > 0 && (
             <div className="table-wrap">
               <table className="table">
