@@ -8,6 +8,7 @@ export const maxDuration = 60;
 
 type Pkg = { key: string; name: string; addresses: string[]; hot?: string[] };
 const g = globalThis as unknown as { __recent?: { at: number; items: Diagnosis[] } };
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 // Real failed mainnet transactions from the demo packages, read through Tatum.
 // Bots call these packages constantly; we keep only failures raised inside the package itself.
@@ -26,10 +27,15 @@ export async function GET() {
       const txs = [];
       for (const addr of p.hot?.length ? p.hot : p.addresses.slice(-1)) {
         for (const [from, to] of windows) {
-          try {
-            txs.push(...(await txsCallingPackage(addr, from, to, 50)));
-          } catch {
-            // Keep what we already have; a rate limit on one window should not empty the list.
+          // Space calls out for Tatum's per-second limit, and retry once after a rate limit.
+          for (let attempt = 0; attempt < 2; attempt++) {
+            await sleep(attempt ? 1_500 : 450);
+            try {
+              txs.push(...(await txsCallingPackage(addr, from, to, 50)));
+              break;
+            } catch {
+              // Keep what we already have; one failed window should not empty the list.
+            }
           }
         }
       }
