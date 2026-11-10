@@ -10,7 +10,7 @@ export const maxDuration = 60;
 type Pkg = { key: string; name: string; addresses: string[]; hot?: string[] };
 const g = globalThis as unknown as { __recent?: { at: number; items: Diagnosis[] } };
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-const BUDGET_MS = 9_000;
+const BUDGET_MS = 3_500; // keep the first screen fast; real replay failures fill the rest
 
 type ReplayItem = { digest: string; key: string; timestamp: string };
 // Real failed mainnet transactions collected through Tatum for the replay (newest per error first).
