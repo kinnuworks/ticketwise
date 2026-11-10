@@ -181,7 +181,10 @@ class LocalDevStore implements Store {
   private rows: { text: string; ns: string; blobId: string; createdAt: string; indexed: boolean }[] = [];
   async remember(text: string, ns: string) {
     const blobId = `local-${this.rows.length + 1}`;
-    this.rows.push({ text, ns, blobId, createdAt: new Date().toISOString(), indexed: true });
+    // Strictly increasing timestamps, so "newest wins" never ties when two saves land in the same millisecond.
+    const last = this.rows.length ? Date.parse(this.rows[this.rows.length - 1].createdAt) : 0;
+    const createdAt = new Date(Math.max(Date.now(), last + 1)).toISOString();
+    this.rows.push({ text, ns, blobId, createdAt, indexed: true });
     return { blobId };
   }
   async recall(query: string, ns: string, limit: number) {
