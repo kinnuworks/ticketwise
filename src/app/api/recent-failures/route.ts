@@ -17,22 +17,27 @@ export async function GET() {
   try {
     const cp = await latestCheckpoint();
     const items: Diagnosis[] = [];
+    // Sample a few short windows across the last ~6 hours (about 9,000 checkpoints an hour),
+    // so the list covers more than whatever one bot was doing in the last few minutes.
+    const windows = [0, 9_000, 27_000, 54_000].map((back) => [cp - back - 2_500, cp - back] as const);
+    const perKey = new Map<string, number>();
     for (const p of pkgs) {
       const own = new Set(p.addresses.map((a) => a.toLowerCase()));
       const txs = [];
       for (const addr of p.hot?.length ? p.hot : p.addresses.slice(-1)) {
-        try {
-          txs.push(...(await txsCallingPackage(addr, cp - 3000, cp, 50)));
-        } catch {
-          // Keep what we already have; a rate limit on one package should not empty the list.
+        for (const [from, to] of windows) {
+          try {
+            txs.push(...(await txsCallingPackage(addr, from, to, 50)));
+          } catch {
+            // Keep what we already have; a rate limit on one window should not empty the list.
+          }
         }
       }
-      const seen = new Set<string>();
       for (const t of txs) {
         if (t.status === "SUCCESS" || !t.error?.packageAddress || !own.has(t.error.packageAddress.toLowerCase())) continue;
         const d = diagnose(t, t.digest);
-        if (!d.key || seen.has(d.key)) continue;
-        seen.add(d.key);
+        if (!d.key || (perKey.get(d.key) ?? 0) >= 2) continue;
+        perKey.set(d.key, (perKey.get(d.key) ?? 0) + 1);
         items.push(d);
       }
     }
