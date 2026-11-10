@@ -232,8 +232,8 @@ function newestFirst(a: Recalled, b: Recalled) {
 // Exact match on the failure key. Newer corrections win over older ones.
 export async function recallForKey(key: string, namespaces: string[]): Promise<Recalled<Correction> | null> {
   const hits: Recalled<Correction>[] = [];
-  for (const ns of namespaces) {
-    const raw = await store().recall(`Ticketwise correction | key: ${key}`, ns, 8);
+  const all = await Promise.all(namespaces.map(async (ns) => ({ ns, raw: await store().recall(`Ticketwise correction | key: ${key}`, ns, 8) })));
+  for (const { ns, raw } of all) {
     for (const h of raw) {
       const r = toRecalled(h, ns);
       if (r && r.record.type === "correction" && r.record.key === key) hits.push(r as Recalled<Correction>);
@@ -261,8 +261,11 @@ export async function recallSimilar(text: string, namespaces: string[]): Promise
 
 export async function recallRules(namespaces: string[]): Promise<Recalled<Rule>[]> {
   const out: Recalled<Rule>[] = [];
-  for (const ns of namespaces) {
-    for (const h of await store().recall("Ticketwise rule | rule: repeat_failure escalate on-call", ns, 5)) {
+  const all = await Promise.all(
+    namespaces.map(async (ns) => ({ ns, raw: await store().recall("Ticketwise rule | rule: repeat_failure escalate on-call", ns, 5) })),
+  );
+  for (const { ns, raw } of all) {
+    for (const h of raw) {
       const r = toRecalled(h, ns);
       if (r && r.record.type === "rule") out.push(r as Recalled<Rule>);
     }

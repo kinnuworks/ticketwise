@@ -74,6 +74,11 @@ export async function triage(message: string, namespaces: string[]): Promise<Tri
   const withoutMemory = blankAnswer(primary);
   let withMemory = blankAnswer(primary);
 
+  // Start the rule lookup alongside the correction lookup; both are Walrus recalls.
+  const sender = primary?.sender ?? addresses[0] ?? null;
+  const wantsRule = !!(sender && primary && primary.kind !== "success" && primary.kind !== "not_found");
+  const rulesP: Promise<Recalled<Rule>[]> = wantsRule ? recallRules(namespaces) : Promise.resolve([]);
+  rulesP.catch(() => {}); // avoid an unhandled rejection if the correction lookup throws first
   if (primary?.key) {
     const hit = await recallForKey(primary.key, namespaces);
     if (hit) withMemory = fromCorrection(primary, hit);
@@ -99,9 +104,8 @@ export async function triage(message: string, namespaces: string[]): Promise<Tri
   }
 
   // Escalation rules taught by the team, evaluated on chain data, never by the model.
-  const sender = primary?.sender ?? addresses[0] ?? null;
-  if (sender && primary && primary.kind !== "success" && primary.kind !== "not_found") {
-    const rules: Recalled<Rule>[] = await recallRules(namespaces);
+  if (wantsRule && sender) {
+    const rules = await rulesP;
     const rule = rules[0];
     if (rule) {
       if (senderFailures === null) {
