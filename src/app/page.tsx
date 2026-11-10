@@ -332,6 +332,12 @@ function CorrectForm({ d, current, onSaved }: { d: Diagnosis; current: Answer; o
           </button>
         )}
       </div>
+      {state === "saving" && (
+        <p className="small">
+          Writing to Walrus on Sui mainnet. This usually takes about 20 seconds, because the memory is encrypted, stored
+          and registered on chain before it can be recalled.
+        </p>
+      )}
       {msg && <p className={state === "error" ? "error" : "small"}>{msg}</p>}
     </div>
   );
@@ -369,7 +375,7 @@ function RuleCard() {
         or more times in a day, page on-call.
       </p>
       <input type="password" placeholder="Team passcode (optional)" value={passcode} onChange={(e) => setPasscode(e.target.value)} style={{ marginTop: 8 }} />
-      <button className="ghost" style={{ marginTop: 8 }} disabled={busy} onClick={save}>{busy ? "Saving…" : "Teach this rule"}</button>
+      <button className="ghost" style={{ marginTop: 8 }} disabled={busy} onClick={save}>{busy ? "Saving to Walrus (about 20 s)…" : "Teach this rule"}</button>
       {msg && <p style={{ marginBottom: 0 }}>{msg}</p>}
     </div>
   );
