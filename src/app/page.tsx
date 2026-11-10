@@ -39,7 +39,8 @@ export default function Home() {
           </h1>
           <p className="lead">
             Paste a user&apos;s message with a failed Sui transaction. Ticketwise reads it from the chain through Tatum, explains
-            it in plain words, and answers with what your team taught it.
+            it in plain words, and answers with what your team taught it. Those lessons live on Walrus, not on our server, so
+            anyone can check them and a wiped server gets them back.
           </p>
           <div className="trust">
             <span>No sign-up</span>
@@ -334,9 +335,9 @@ function InboxApp() {
                 <li key={q.id}>
                   <div className="row">
                     <span className="pill mini">{q.queue}</span>
-                    {q.learned && <span className="pill pill--learned mini">taught</span>}
+                    {q.learned ? <span className="pill pill--learned mini">answered from memory</span> : <span className="pill pill--warn mini">not taught yet</span>}
                   </div>
-                  <span className="msg">{q.message}</span>
+                  <span className="msg t-mono">{q.key ?? q.message}</span>
                 </li>
               ))}
             </ul>
@@ -377,6 +378,9 @@ function TicketResult({
           </button>
         </div>
       </div>
+      <p className="t-micro" style={{ marginTop: 6 }}>
+        Switch memory off to see the same ticket answered without anything your team taught.
+      </p>
       {t.memoryMode === "local-dev" && <div className="note note--dev">Developer mode: memory is held on this server, not in Walrus.</div>}
 
       <div className="ticket__section">
@@ -417,17 +421,13 @@ function TicketResult({
           ) : (
             <span className="pill">Normal priority</span>
           )}
-          {a.learnedFrom && (
-            <span className="pill pill--learned">
-              <CheckCircle /> {sandbox ? "Taught by you (sandbox)" : "Taught by your team"}
-            </span>
-          )}
         </div>
         {a.learnedFrom ? (
           <div className="note note--learned">
             <CheckCircle />
             <span>
-              Learned from {/^you\b/i.test(a.learnedFrom.by) ? "your" : `${a.learnedFrom.by}'s`} correction on {day(a.learnedFrom.on)}.{" "}
+              Learned from {/^you\b/i.test(a.learnedFrom.by) ? "your" : `${a.learnedFrom.by}'s`} correction on {day(a.learnedFrom.on)}
+              {sandbox ? ", saved in your sandbox" : ""}.{" "}
               {a.learnedFrom.blobId && !a.learnedFrom.blobId.startsWith("local-") && (
                 <a href={`https://walruscan.com/mainnet/blob/${a.learnedFrom.blobId}`} target="_blank" rel="noreferrer">
                   Stored on Walrus
@@ -639,7 +639,10 @@ function RuleCard() {
         </select>{" "}
         or more times in a day, page on-call.
       </p>
-      <input className="input" type="password" placeholder="Team passcode (optional)" value={passcode} onChange={(e) => setPasscode(e.target.value)} style={{ marginTop: 10 }} aria-label="Team passcode" />
+      <details style={{ marginTop: 8 }}>
+        <summary className="t-micro" style={{ cursor: "pointer" }}>Teammate? Add the team passcode</summary>
+        <input className="input" type="password" placeholder="Team passcode" value={passcode} onChange={(e) => setPasscode(e.target.value)} style={{ marginTop: 8 }} aria-label="Team passcode" />
+      </details>
       <button className="btn btn-sm btn-outline" style={{ marginTop: 10, width: "100%" }} disabled={busy} onClick={save}>
         {busy ? "Saving to Walrus (about 20 s)…" : "Teach this rule"}
       </button>

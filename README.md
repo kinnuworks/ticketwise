@@ -2,7 +2,7 @@
 
 Ticketwise is a support agent for Sui apps. It reads a user's failed transaction through Tatum, explains the abort code in plain words, and learns what each error means from your team's corrections.
 
-Those corrections live in Walrus Memory on Sui mainnet, so they outlast the server, survive an index wipe, and can be checked on chain.
+Those corrections live in Walrus Memory on Sui mainnet, not in a database on our server. Anyone can check each one on Walruscan, and if the server or its search index is wiped, they come back from Walrus.
 
 **Live app: https://ticketwise-gamma.vercel.app**
 
